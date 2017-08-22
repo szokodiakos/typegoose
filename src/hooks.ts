@@ -1,6 +1,6 @@
 import { hooks as hooksData } from './data';
 
-type Method = 'init' | 'validate' | 'save' | 'remove';
+type Method = 'init' | 'validate' | 'save' | 'remove' | 'update' | 'findOneAndUpdate';
 type ClassDecorator = (constructor: any) => void;
 type HookNextFn = (err?: Error) => void;
 
