@@ -10,7 +10,7 @@ export * from './hooks';
 export * from './plugin';
 
 export type InstanceType<T> = T & mongoose.Document;
-export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
+export type ModelType<T> = mongoose.Model<InstanceType<T>>;
 
 export interface GetModelForClassOptions {
   existingMongoose?: mongoose.Mongoose;
