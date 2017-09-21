@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
-import { schema, models, methods, virtuals, hooks, plugins } from './data';
+import { schema, mongooseSchema, models, methods, virtuals, hooks, plugins } from './data';
 
 export * from './method';
 export * from './prop';
@@ -21,12 +21,9 @@ export interface Constructor<T> {
   new(): T;
 }
 
-export function getModelForClass<T, U extends Constructor<T>>(
-  constructor: U,
-  { existingMongoose, schemaOptions }: GetModelForClassOptions = {},
-) {
+export function getSchemaForClass(constructor, { existingMongoose, schemaOptions }: GetModelForClassOptions = {}) {
   const name = (constructor as any).name as string;
-  if (!models[name]) {
+  if (!mongooseSchema[name]) {
     const Schema = existingMongoose ?
       existingMongoose.Schema.bind(existingMongoose) :
       mongoose.Schema.bind(mongoose);
@@ -68,10 +65,22 @@ export function getModelForClass<T, U extends Constructor<T>>(
       }
     });
 
+    mongooseSchema[name] = sch;
+  }
+
+  return mongooseSchema[name] as mongoose.Schema;
+}
+
+export function getModelForClass<T, U extends Constructor<T>>(
+  constructor: U, { existingMongoose, schemaOptions }: GetModelForClassOptions = {},
+) {
+  const name = (constructor as any).name as string;
+  if (!models[name]) {
     const model = existingMongoose ?
       existingMongoose.model.bind(existingMongoose) :
       mongoose.model.bind(mongoose);
 
+    const sch = getSchemaForClass(constructor, { existingMongoose, schemaOptions });
     models[name] = model(name, sch);
   }
 
