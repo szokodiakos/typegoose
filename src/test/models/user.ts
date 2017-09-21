@@ -10,7 +10,7 @@ import {
   Ref,
   prop,
   arrayProp,
-  Typegoose,
+  getModelForClass,
   ModelType,
   InstanceType,
   staticMethod,
@@ -25,7 +25,7 @@ export interface FindOrCreateResult<T> {
 }
 
 @plugin(findOrCreate)
-export class User extends Typegoose {
+export class User {
   @prop({ required: true })
   firstName: string;
 
@@ -101,4 +101,4 @@ export class User extends Typegoose {
   static findOrCreate: (condition: any) => Promise<FindOrCreateResult<User>>;
 }
 
-export const model = new User().getModelForClass(User);
+export const model = getModelForClass<User, typeof User>(User);

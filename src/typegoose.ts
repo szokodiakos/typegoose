@@ -17,58 +17,63 @@ export interface GetModelForClassOptions {
   schemaOptions?: mongoose.SchemaOptions;
 }
 
-export class Typegoose {
-  getModelForClass<T>(t: T, { existingMongoose, schemaOptions }: GetModelForClassOptions = {}) {
-    const name = (this.constructor as any).name;
-    if (!models[name]) {
-      const Schema = existingMongoose ?
-        existingMongoose.Schema.bind(existingMongoose) :
-        mongoose.Schema.bind(mongoose);
+export interface Constructor<T> {
+  new(): T;
+}
 
-      const sch = schemaOptions ?
-        new Schema(schema[name], schemaOptions) :
-        new Schema(schema[name]);
+export function getModelForClass<T, U extends Constructor<T>>(
+  constructor: U,
+  { existingMongoose, schemaOptions }: GetModelForClassOptions = {},
+) {
+  const name = (constructor as any).name as string;
+  if (!models[name]) {
+    const Schema = existingMongoose ?
+      existingMongoose.Schema.bind(existingMongoose) :
+      mongoose.Schema.bind(mongoose);
 
-      const staticMethods = methods.staticMethods[name];
-      sch.statics = staticMethods;
+    const sch = schemaOptions ?
+      new Schema(schema[name], schemaOptions) :
+      new Schema(schema[name]);
 
-      const instanceMethods = methods.instanceMethods[name];
-      sch.methods = instanceMethods || {};
+    const staticMethods = methods.staticMethods[name];
+    sch.statics = staticMethods;
 
-      if (hooks[name]) {
-        const preHooks = hooks[name].pre;
-        preHooks.forEach((preHookArgs) => {
-          sch.pre(...preHookArgs);
-        });
-        const postHooks = hooks[name].post;
-        postHooks.forEach((postHookArgs) => {
-          sch.post(...postHookArgs);
-        });
-      }
+    const instanceMethods = methods.instanceMethods[name];
+    sch.methods = instanceMethods || {};
 
-      if (plugins[name]) {
-        _.forEach(plugins[name], (plugin) => {
-          sch.plugin(plugin.mongoosePlugin, plugin.options);
-        });
-      }
-
-      const getterSetters = virtuals[name];
-      _.forEach(getterSetters, (value, key) => {
-        if (value.get) {
-          sch.virtual(key).get(value.get);
-        }
-        if (value.set) {
-          sch.virtual(key).set(value.set);
-        }
+    if (hooks[name]) {
+      const preHooks = hooks[name].pre;
+      preHooks.forEach((preHookArgs) => {
+        sch.pre(...preHookArgs);
       });
-
-      const model = existingMongoose ?
-        existingMongoose.model.bind(existingMongoose) :
-        mongoose.model.bind(mongoose);
-
-      models[name] = model(name, sch);
+      const postHooks = hooks[name].post;
+      postHooks.forEach((postHookArgs) => {
+        sch.post(...postHookArgs);
+      });
     }
 
-    return models[name] as ModelType<this> & T;
+    if (plugins[name]) {
+      _.forEach(plugins[name], (plugin) => {
+        sch.plugin(plugin.mongoosePlugin, plugin.options);
+      });
+    }
+
+    const getterSetters = virtuals[name];
+    _.forEach(getterSetters, (value, key) => {
+      if (value.get) {
+        sch.virtual(key).get(value.get);
+      }
+      if (value.set) {
+        sch.virtual(key).set(value.set);
+      }
+    });
+
+    const model = existingMongoose ?
+      existingMongoose.model.bind(existingMongoose) :
+      mongoose.model.bind(mongoose);
+
+    models[name] = model(name, sch);
   }
+
+  return models[name] as ModelType<T> & U;
 }
