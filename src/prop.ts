@@ -133,6 +133,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
       ...schema[name][key],
       ...options,
       type: Type,
+      writable: true,
     };
   }
 
