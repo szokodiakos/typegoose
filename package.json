@@ -1,16 +1,15 @@
 {
   "name": "typegoose",
-  "version": "3.4.5",
+  "version": "3.5.1",
   "description": "Define Mongoose models using TypeScript classes.",
   "main": "lib/typegoose.js",
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
     "lint": "tslint --type-check --project tsconfig.json",
-    "precommit": "npm run test",
     "test": "npm run lint && npm run cover",
-    "mocha": "npm run build && mocha 'lib/test/**/*.test.js'",
-    "cover": "npm run build && istanbul cover _mocha -- 'lib/test/**/*.test.js' -R spec",
+    "mocha": "npm run build && mocha ./lib/test/**/*.test.js",
+    "cover": "npm run build && istanbul cover node_modules/mocha/bin/_mocha -- ./lib/test/**/*.test.js -R spec",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
@@ -22,16 +21,15 @@
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "license": "MIT",
   "dependencies": {
-    "@types/mongoose": "^4.7.1",
+    "@types/mongoose": "^4.7.15",
     "lodash": "^4.17.4",
-    "mongoose": "^4.7.3",
+    "mongoose": "^4.11.1",
     "reflect-metadata": "^0.1.8",
     "typescript": "^2.4.2"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
     "@types/dotenv": "^4.0.0",
-    "@types/es6-promise": "^0.0.32",
     "@types/lodash": "^4.14.55 <4.14.74",
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.52",
@@ -41,11 +39,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "mongoose-findorcreate": "^2.0.0",
-    "pre-commit": "^1.2.2",
     "rimraf": "^2.6.1",
     "tslint": "^5.2.0"
-  },
-  "pre-commit": [
-    "precommit"
-  ]
+  }
 }

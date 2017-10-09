@@ -2,12 +2,13 @@ import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
-import { schema, mongooseSchema, models, methods, virtuals, hooks, plugins } from './data';
+import { schema, mongooseSchema, models, methods, virtuals, hooks, plugins, constructors } from './data';
 
 export * from './method';
 export * from './prop';
 export * from './hooks';
 export * from './plugin';
+export { getClassForDocument } from './utils';
 
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>>;
@@ -15,13 +16,17 @@ export type ModelType<T> = mongoose.Model<InstanceType<T>>;
 export interface GetModelForClassOptions {
   existingMongoose?: mongoose.Mongoose;
   schemaOptions?: mongoose.SchemaOptions;
+  existingConnection?: mongoose.Connection;
 }
 
 export interface Constructor<T> {
   new(): T;
 }
 
-export function getSchemaForClass(constructor, { existingMongoose, schemaOptions }: GetModelForClassOptions = {}) {
+export function getSchemaForClass(
+  constructor,
+  { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {},
+) {
   const name = (constructor as any).name as string;
   if (!mongooseSchema[name]) {
     const Schema = existingMongoose ?
@@ -53,6 +58,15 @@ export function getSchemaForClass(constructor, { existingMongoose, schemaOptions
       _.forEach(plugins[name], (plugin) => {
         sch.plugin(plugin.mongoosePlugin, plugin.options);
       });
+      let model = mongoose.model.bind(mongoose);
+      if (existingConnection) {
+        model = existingConnection.model.bind(existingConnection);
+      } else if (existingMongoose) {
+        model = existingMongoose.model.bind(existingMongoose);
+      }
+
+      models[name] = model(name, sch);
+      constructors[name] = this.constructor;
     }
 
     const getterSetters = virtuals[name];
