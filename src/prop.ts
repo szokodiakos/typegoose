@@ -15,6 +15,7 @@ export interface BasePropOptions {
   default?: any;
   unique?: boolean;
   index?: boolean;
+  select?: boolean
 }
 
 export interface PropOptions extends BasePropOptions {
