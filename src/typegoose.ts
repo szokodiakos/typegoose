@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
-import { schema, models, methods, virtuals, hooks, plugins, constructors } from './data';
+import { schema, mongooseSchema, models, methods, virtuals, hooks, plugins, constructors } from './data';
 
 export * from './method';
 export * from './prop';
@@ -10,7 +10,7 @@ export * from './plugin';
 export { getClassForDocument } from './utils';
 
 export type InstanceType<T> = T & mongoose.Document;
-export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
+export type ModelType<T> = mongoose.Model<InstanceType<T>>;
 
 export interface GetModelForClassOptions {
   existingMongoose?: mongoose.Mongoose;
@@ -18,49 +18,45 @@ export interface GetModelForClassOptions {
   existingConnection?: mongoose.Connection;
 }
 
-export class Typegoose {
-  getModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
-    const name = this.constructor.name;
-    if (!models[name]) {
-      const Schema = mongoose.Schema;
+export interface Constructor<T> {
+  new(): T;
+}
 
-      const sch = schemaOptions ?
-        new Schema(schema[name], schemaOptions) :
-        new Schema(schema[name]);
+export function getSchemaForClass(
+  constructor,
+  { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {},
+) {
+  const name = (constructor as any).name as string;
+  if (!mongooseSchema[name]) {
+    const Schema = existingMongoose ?
+      existingMongoose.Schema.bind(existingMongoose) :
+      mongoose.Schema.bind(mongoose);
 
-      const staticMethods = methods.staticMethods[name];
-      sch.statics = staticMethods || {};
+    const sch = schemaOptions ?
+      new Schema(schema[name], schemaOptions) :
+      new Schema(schema[name]);
 
-      const instanceMethods = methods.instanceMethods[name];
-      sch.methods = instanceMethods || {};
+    const staticMethods = methods.staticMethods[name];
+    sch.statics = staticMethods;
 
-      if (hooks[name]) {
-        const preHooks = hooks[name].pre;
-        preHooks.forEach((preHookArgs) => {
-          (sch as any).pre(...preHookArgs);
-        });
-        const postHooks = hooks[name].post;
-        postHooks.forEach((postHookArgs) => {
-          (sch as any).post(...postHookArgs);
-        });
-      }
+    const instanceMethods = methods.instanceMethods[name];
+    sch.methods = instanceMethods || {};
 
-      if (plugins[name]) {
-        _.forEach(plugins[name], (plugin) => {
-          sch.plugin(plugin.mongoosePlugin, plugin.options);
-        });
-      }
-
-      const getterSetters = virtuals[name];
-      _.forEach(getterSetters, (value, key) => {
-        if (value.get) {
-          sch.virtual(key).get(value.get);
-        }
-        if (value.set) {
-          sch.virtual(key).set(value.set);
-        }
+    if (hooks[name]) {
+      const preHooks = hooks[name].pre;
+      preHooks.forEach((preHookArgs) => {
+        sch.pre(...preHookArgs);
       });
+      const postHooks = hooks[name].post;
+      postHooks.forEach((postHookArgs) => {
+        sch.post(...postHookArgs);
+      });
+    }
 
+    if (plugins[name]) {
+      _.forEach(plugins[name], (plugin) => {
+        sch.plugin(plugin.mongoosePlugin, plugin.options);
+      });
       let model = mongoose.model.bind(mongoose);
       if (existingConnection) {
         model = existingConnection.model.bind(existingConnection);
@@ -72,6 +68,34 @@ export class Typegoose {
       constructors[name] = this.constructor;
     }
 
-    return models[name] as ModelType<this> & T;
+    const getterSetters = virtuals[name];
+    _.forEach(getterSetters, (value, key) => {
+      if (value.get) {
+        sch.virtual(key).get(value.get);
+      }
+      if (value.set) {
+        sch.virtual(key).set(value.set);
+      }
+    });
+
+    mongooseSchema[name] = sch;
   }
+
+  return mongooseSchema[name] as mongoose.Schema;
+}
+
+export function getModelForClass<T, U extends Constructor<T>>(
+  constructor: U, { existingMongoose, schemaOptions }: GetModelForClassOptions = {},
+) {
+  const name = (constructor as any).name as string;
+  if (!models[name]) {
+    const model = existingMongoose ?
+      existingMongoose.model.bind(existingMongoose) :
+      mongoose.model.bind(mongoose);
+
+    const sch = getSchemaForClass(constructor, { existingMongoose, schemaOptions });
+    models[name] = model(name, sch);
+  }
+
+  return models[name] as ModelType<T> & U;
 }

@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 
-import { prop, Typegoose, pre, post } from '../../typegoose';
+import { prop, getModelForClass, pre, post } from '../../typegoose';
 
 @pre<Dummy>('save', function(next) {
   this.text = 'saved';
@@ -13,9 +13,9 @@ import { prop, Typegoose, pre, post } from '../../typegoose';
 @post<Dummy>('findOne', (result) => {
   result.text = 'changed in post findOne hook';
 })
-export class Dummy extends Typegoose {
+export class Dummy {
   @prop()
   text: string;
 }
 
-export const model = new Dummy().getModelForClass(Dummy);
+export const model = getModelForClass<Dummy, typeof Dummy>(Dummy);
