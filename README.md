@@ -105,7 +105,7 @@ Please note that sub documents doesn't have to extend Typegoose. You can still g
 
 ## Requirements
 
-* TypeScript 2.1+
+* TypeScript 2.4+
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
 
 ## Install
@@ -114,15 +114,15 @@ Please note that sub documents doesn't have to extend Typegoose. You can still g
 
 ## Peer dependencies
 
-In order to make this lib works, you need to install also the peer dependencies:
+In order to make this lib work, you also need to install the following peer dependencies::
 
 * mongoose (`npm install mongoose -S`)
 * mongoose typings (`npm install @types/mongoose -S`)
 
-Also, you need to provide o polyfill for Metadata Reflection API for ECMAScript - it might be `core-js/es7/reflect` or [`reflect-metadata`](https://github.com/rbuckton/reflect-metadata). Remember that you have to import it at the top of your app entry file.
+Also, you need to provide a polyfill for Metadata Reflection API for ECMAScript - it might be `core-js/es7/reflect` or [`reflect-metadata`](https://github.com/rbuckton/reflect-metadata). Remember that you have to import it at the top of your app entry file.
 ```ts
 // index.ts
-import "reflect-metadata";
+import 'reflect-metadata';
 
 // your boostrap code goes here
 ```
