@@ -1,6 +1,6 @@
 {
   "name": "typegoose",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "description": "Define Mongoose models using TypeScript classes.",
   "main": "lib/typegoose.js",
   "scripts": {
@@ -8,9 +8,12 @@
     "build": "rimraf lib && tsc",
     "lint": "tslint --type-check --project tsconfig.json",
     "test": "npm run lint && npm run cover",
-    "mocha": "npm run build && mocha ./lib/test/**/*.test.js",
-    "cover": "npm run build && istanbul cover node_modules/mocha/bin/_mocha -- ./lib/test/**/*.test.js -R spec",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "mocha": "npm run build && mocha 'lib/test/**/*.test.js'",
+    "cover": "npm run build && istanbul cover _mocha -- 'lib/test/**/*.test.js' -R spec",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "test:windows": "npm run lint && npm run cover:windows",
+    "mocha:windows": "npm run build && mocha ./lib/test/**/*.test.js",
+    "cover:windows": "npm run build && istanbul cover node_modules/mocha/bin/_mocha -- ./lib/test/**/*.test.js -R spec"
   },
   "repository": {
     "type": "git",
@@ -21,25 +24,29 @@
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "license": "MIT",
   "dependencies": {
+    "lodash": "^4.17.4"
+  },
+  "peerDependencies": {
     "@types/mongoose": "^4.7.15",
-    "lodash": "^4.17.4",
-    "mongoose": "^4.11.1",
-    "reflect-metadata": "^0.1.8",
-    "typescript": "^2.4.2"
+    "mongoose": "^4.11.1"
   },
   "devDependencies": {
     "@types/chai": "^3.4.35",
     "@types/dotenv": "^4.0.0",
     "@types/lodash": "^4.14.55 <4.14.74",
     "@types/mocha": "^2.2.33",
+    "@types/mongoose": "^4.7.15",
     "@types/node": "^6.0.52",
     "chai": "^3.5.0",
     "coveralls": "^2.13.1",
     "dotenv": "^4.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
+    "mongoose": "^4.11.1",
     "mongoose-findorcreate": "^2.0.0",
+    "reflect-metadata": "^0.1.8",
     "rimraf": "^2.6.1",
-    "tslint": "^5.2.0"
+    "tslint": "^5.2.0",
+    "typescript": "^2.4.2"
   }
 }

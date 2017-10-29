@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
@@ -66,7 +65,6 @@ export function getSchemaForClass(
       }
 
       models[name] = model(name, sch);
-      constructors[name] = this.constructor;
     }
 
     const getterSetters = virtuals[name];
@@ -80,6 +78,7 @@ export function getSchemaForClass(
     });
 
     mongooseSchema[name] = sch;
+    constructors[name] = constructor;
   }
 
   return mongooseSchema[name] as mongoose.Schema;

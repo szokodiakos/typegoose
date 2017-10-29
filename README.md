@@ -38,7 +38,7 @@ A common problem when using Mongoose with TypeScript is that you have to define 
 
 Typegoose aims to solve this problem by defining only a TypeScript interface (class) which need to be enhanced with special Typegoose decorators.
 
-Under the hood it uses the [reflect-metadata](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties, so redundancy can be significantly reduced.
+Under the hood it uses the [experimental metadata API](https://github.com/rbuckton/reflect-metadata) API to retrieve the types of the properties in runtime, so redundancy can be significantly reduced. 
 
 Instead of:
 ```typescript
@@ -106,16 +106,33 @@ Please note that sub documents doesn't have to extend Typegoose. You can still g
 
 ## Requirements
 
-* TypeScript 2.1+
+* TypeScript 2.4+
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
 
 ## Install
 
 `npm install typegoose -S`
 
+## Peer dependencies
+
+In order to make this lib work, you also need to install the following peer dependencies::
+
+* mongoose (`npm install mongoose -S`)
+* mongoose typings (`npm install @types/mongoose -S`)
+
+Also, you need to provide a polyfill for Metadata Reflection API for ECMAScript - it might be `core-js/es7/reflect` or [`reflect-metadata`](https://github.com/rbuckton/reflect-metadata). Remember that you have to import it at the top of your app entry file.
+```ts
+// index.ts
+import 'reflect-metadata';
+
+// your boostrap code goes here
+```
+
 ## Testing
 
 `npm test`
+
+(on Windows env it's `npm run test:windows`)
 
 ## API Documentation
 

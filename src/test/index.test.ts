@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import * as _ from 'lodash';
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';

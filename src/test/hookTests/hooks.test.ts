@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { expect } from 'chai';
 
 import { model as Hook } from './hooktestModel';
