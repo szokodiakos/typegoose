@@ -14,7 +14,7 @@ export const initAsObject = (name, key) => {
     schema[name] = {};
   }
   if (!schema[name][key]) {
-    schema[name][key] = {writable: true};
+    schema[name][key] = createWritableObject();
   }
 };
 
@@ -23,11 +23,19 @@ export const initAsArray = (name, key) => {
     schema[name] = {};
   }
   if (!schema[name][key]) {
-    schema[name][key] = [{writable: true}];
+    schema[name][key] = [createWritableObject];
   }
 };
 
 export const getClassForDocument = (document: mongoose.Document): any => {
   const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
   return constructors[modelName];
+};
+
+const createWritableObject = (): any => {
+  let writableObject: any;
+  writableObject = {};
+  Object.defineProperty(writableObject, 'writable', { writable: true, enumerable: false });
+  writableObject.writable = true;
+  return writableObject;
 };
