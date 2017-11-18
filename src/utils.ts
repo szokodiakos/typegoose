@@ -14,7 +14,7 @@ export const initAsObject = (name, key) => {
     schema[name] = {};
   }
   if (!schema[name][key]) {
-    schema[name][key] = {writable:true};
+    schema[name][key] = {writable: true};
   }
 };
 
@@ -23,7 +23,7 @@ export const initAsArray = (name, key) => {
     schema[name] = {};
   }
   if (!schema[name][key]) {
-    schema[name][key] = [{writable:true}];
+    schema[name][key] = [{writable: true}];
   }
 };
 
