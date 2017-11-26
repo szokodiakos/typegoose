@@ -116,7 +116,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     throw new NotNumberTypeError(key);
   }
 
-const instance = new Type();
+  const instance = new Type();
   const subSchema = schema[instance.constructor.name];
   if (!subSchema && !(isPrimitive(Type) || isMongoose(Type))) {
     throw new InvalidPropError(Type.name, key);
