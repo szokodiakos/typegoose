@@ -13,23 +13,31 @@ export { getClassForDocument } from './utils';
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
 
+export interface SchemaIndex {
+  fields: any;
+  options?: any;
+}
+
 export interface GetModelForClassOptions {
   existingMongoose?: mongoose.Mongoose;
   schemaOptions?: mongoose.SchemaOptions;
   existingConnection?: mongoose.Connection;
+  indexes?: Array<SchemaIndex>;
 }
 
 export class Typegoose {
-  getModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
+  getModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection,
+    indexes }: GetModelForClassOptions = {}) {
     const name = this.constructor.name;
     if (!models[name]) {
-      this.setModelForClass(t, { existingMongoose, schemaOptions, existingConnection });
+      this.setModelForClass(t, { existingMongoose, schemaOptions, existingConnection, indexes });
     }
 
     return models[name] as ModelType<this> & T;
   }
 
-  setModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
+  setModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection,
+    indexes }: GetModelForClassOptions = {}) {
     const name = this.constructor.name;
 
     // get schema of current model
@@ -42,6 +50,12 @@ export class Typegoose {
       sch = this.buildSchema(parentCtor.name, schemaOptions, sch);
       // next parent
       parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
+    }
+
+    if (indexes) {
+      indexes.forEach((index) => {
+        sch.index(index.fields, index.options);
+      });
     }
 
     let model = mongoose.model.bind(mongoose);
