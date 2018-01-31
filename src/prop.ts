@@ -120,7 +120,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
   const instance = new Type();
   const subSchema = schema[instance.constructor.name];
-  if (!subSchema && !isPrimitive(Type)) {
+  if (!subSchema && !isPrimitive(Type) && !enumOption) {
     throw new InvalidPropError(Type.name, key);
   }
 
