@@ -118,14 +118,26 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     throw new NotNumberTypeError(key);
   }
 
-  const instance = new Type();
-  const subSchema = schema[instance.constructor.name];
-  if (!subSchema && !isPrimitive(Type) && !enumOption) {
-    throw new InvalidPropError(Type.name, key);
+  let subSchema = {};
+
+  if (!enumOption) {
+    const instance = new Type();
+
+    subSchema = schema[instance.constructor.name];
+
+    if (!subSchema && !isPrimitive(Type)) {
+      throw new InvalidPropError(Type.name, key);
+    }
   }
 
-  const options = _.omit(rawOptions, ['ref', 'items']);
-  if (isPrimitive(Type)) {
+  const options: any = _.omit(rawOptions, ['ref', 'items']);
+
+  // Allow required enums.
+  if (options.required && enumOption) {
+    options.type = String;
+  }
+
+  if (isPrimitive(Type) || enumOption) {
     if (isArray) {
       schema[name][key][0] = {
         ...schema[name][key][0],
