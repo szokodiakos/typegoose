@@ -107,6 +107,7 @@ Please note that sub documents doesn't have to extend Typegoose. You can still g
 
 * TypeScript 2.1+
 * `emitDecoratorMetadata` and `experimentalDecorators` must be enabled in `tsconfig.json`
+* If using `ts-node`, make sure to pass the `--type-check` command line parameter, even if you have a `project`.
 
 ## Install
 
