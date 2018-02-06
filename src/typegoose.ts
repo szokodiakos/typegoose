@@ -1,6 +1,9 @@
 import 'reflect-metadata';
-import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
+import { useMongooseImplementation, mongoose as mongooseImplementation } from './mongoose';
+
+// For types.
+import * as mongoose from 'mongoose';
 
 import { schema, models, methods, virtuals, hooks, plugins, constructors } from './data';
 
@@ -33,18 +36,18 @@ export class Typegoose {
     const name = this.constructor.name;
 
     // get schema of current model
-    let sch = this.buildSchema(existingMongoose || mongoose, name, schemaOptions);
+    let sch = this.buildSchema(existingMongoose || mongooseImplementation, name, schemaOptions);
     // get parents class name
     let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
     // iterate trough all parents
     while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
       // extend schema
-      sch = this.buildSchema(existingMongoose || mongoose, parentCtor.name, schemaOptions, sch);
+      sch = this.buildSchema(existingMongoose || mongooseImplementation, parentCtor.name, schemaOptions, sch);
       // next parent
       parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
     }
 
-    let model = mongoose.model.bind(mongoose);
+    let model = mongooseImplementation.model.bind(mongooseImplementation);
     if (existingConnection) {
       model = existingConnection.model.bind(existingConnection);
     } else if (existingMongoose) {
@@ -112,3 +115,6 @@ export class Typegoose {
     return sch;
   }
 }
+
+// By default, use our version of the mongoose implementation.
+useMongooseImplementation(mongoose);

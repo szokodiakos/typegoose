@@ -12,6 +12,7 @@ export interface FindOrCreateResult<T> {
 export declare class User extends Typegoose {
     firstName: string;
     lastName: string;
+    importedData: any;
     fullName: string;
     nick?: string;
     uniqueId?: string;

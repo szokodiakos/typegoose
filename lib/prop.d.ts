@@ -7,6 +7,7 @@ export interface BasePropOptions {
     unique?: boolean;
     index?: boolean;
     sparse?: boolean;
+    mixed?: boolean;
     expires?: string | number;
 }
 export interface PropOptions extends BasePropOptions {

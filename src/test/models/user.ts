@@ -33,6 +33,9 @@ export class User extends Typegoose {
   @prop({ required: true })
   lastName: string;
 
+  @prop({ mixed: true })
+  importedData: any;
+
   @prop()
   get fullName() {
     return `${this.firstName} ${this.lastName}`;

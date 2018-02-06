@@ -29,6 +29,7 @@ describe('Typegoose', () => {
       firstName: 'John',
       lastName: 'Doe',
       age: 20,
+      importedData: { a: 2, b: 3 },
       uniqueId: 'john-doe-20',
       gender: Genders.MALE,
       role: Role.User,
@@ -67,6 +68,9 @@ describe('Typegoose', () => {
       expect(foundUser.job).to.have.property('startedAt').to.be.instanceof(Date);
       expect(foundUser.car).to.have.property('model', 'Tesla');
       expect(foundUser).to.have.property('previousJobs').to.have.length(2);
+      expect(foundUser).to.have.property('importedData');
+      expect(foundUser.importedData).to.have.property('a', 2);
+      expect(foundUser.importedData).to.have.property('b', 3);
 
       expect(foundUser).to.have.property('fullName', 'John Doe');
 

@@ -1,4 +1,3 @@
-import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
 
 import { schema, virtuals } from './data';
@@ -9,6 +8,8 @@ export type Func = (...args: any[]) => any;
 
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
+import { ObjectId, Mixed } from './mongoose';
+
 export interface BasePropOptions {
   required?: RequiredType;
   enum?: string[] | object;
@@ -16,6 +17,7 @@ export interface BasePropOptions {
   unique?: boolean;
   index?: boolean;
   sparse?: boolean;
+  mixed?: boolean;
   expires?: string | number;
 }
 
@@ -47,6 +49,12 @@ const isWithNumberValidate = (options: PropOptionsWithNumberValidate) =>
 const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const name = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
+
+  if (rawOptions.mixed) {
+    schema[name][key] = Mixed;
+    return;
+  }
+
   if (isGetterSetter) {
     if (isGetterSetter.get) {
       if (!virtuals[name]) {
@@ -86,7 +94,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   if (ref) {
     schema[name][key] = {
       ...schema[name][key],
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: ref.name,
     };
     return;
@@ -96,7 +104,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   if (itemsRef) {
     schema[name][key][0] = {
       ...schema[name][key][0],
-      type: mongoose.Schema.Types.ObjectId,
+      type: ObjectId,
       ref: itemsRef.name,
     };
     return;
