@@ -36,6 +36,10 @@ describe('Typegoose', () => {
       job: {
         title: 'Developer',
         position: 'Lead',
+        jobType: {
+          salery: 5000,
+          field: "IT",
+        },
       },
       car: car.id,
       languages: ['english', 'typescript'],
