@@ -2,9 +2,10 @@
   "compilerOptions": {
     "target": "es2015",
     "module": "commonjs",
-    "declaration": true,
+    // "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "allowJs": true,
     "outDir": "lib",
     "sourceMap": true
   },

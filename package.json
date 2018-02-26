@@ -24,7 +24,6 @@
     "@types/mongoose": "^5.0.2",
     "lodash": "^4.17.4",
     "mongoose": "^5.0.7",
-    "mongoose-findorcreate": "^2.0.0",
     "reflect-metadata": "^0.1.8",
     "typescript": "2.6.2"
   },
