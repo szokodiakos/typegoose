@@ -2,14 +2,14 @@
   "compilerOptions": {
     "target": "es2015",
     "module": "commonjs",
-    // "declaration": true,
+    "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowJs": true,
+    "allowJs": false,
     "outDir": "lib",
     "sourceMap": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts"
   ]
 }
