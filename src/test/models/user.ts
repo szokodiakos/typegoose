@@ -1,8 +1,5 @@
 import * as mongoose from 'mongoose';
 import * as _ from 'lodash';
-// tslint:disable-next-line:no-var-requires
-// import { findOrCreatePlugin as findOrCreate } from '../utils/findOrCreate'
-
 import findOrCreate = require("../utils/findOrCreatePlugin");
 
 import { Job } from './job';
