@@ -22,7 +22,6 @@
   "license": "MIT",
   "dependencies": {
     "@types/mongoose": "^5.0.2",
-    "lodash": "^4.17.4",
     "mongoose": "^5.0.7",
     "reflect-metadata": "^0.1.8",
     "typescript": "2.6.2"
@@ -30,7 +29,6 @@
   "devDependencies": {
     "@types/chai": "^3.4.35",
     "@types/dotenv": "^4.0.0",
-    "@types/lodash": "^4.14.55 <4.14.74",
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.52",
     "chai": "^3.5.0",
