@@ -77,13 +77,13 @@ describe('Typegoose', () => {
 
       expect(foundUser).to.have.property('fullName', 'John Doe');
 
-      const [janitor, manager] = _.sortBy(foundUser.previousJobs, ((job) => job.title));
+      const [janitor, manager] = foundUser.previousJobs;
       expect(janitor).to.have.property('title', 'Janitor');
       expect(manager).to.have.property('title', 'Manager');
 
       expect(foundUser).to.have.property('previousCars').to.have.length(2);
-      const [foundTrabant, foundZastava] =
-        _.sortBy(foundUser.previousCars, (previousCar) => (previousCar as CarType).model);
+      const [foundTrabant, foundZastava] = foundUser.previousCars;
+
       expect(foundTrabant).to.have.property('model', 'Trabant');
       expect(foundTrabant).to.have.property('isSedan', true);
       expect(foundZastava).to.have.property('model', 'Zastava');
