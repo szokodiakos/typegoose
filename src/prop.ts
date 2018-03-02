@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import * as _ from 'lodash';
 
 import { schema, virtuals } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber, isObject } from './utils';
@@ -124,7 +123,8 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     throw new InvalidPropError(Type.name, key);
   }
 
-  const options = _.omit(rawOptions, ['ref', 'items']);
+  const { ["ref"]: r, ["items"]: i, ...options } = rawOptions;
+
   if (isPrimitive(Type)) {
     if (isArray) {
       schema[name][key][0] = {
