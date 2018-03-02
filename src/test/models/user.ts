@@ -1,5 +1,6 @@
 import * as mongoose from 'mongoose';
-import { findOrCreatePlugin } from '../utils/findOrCreatePlugin';
+// tslint:disable-next-line:no-var-requires
+const findOrCreate = require('mongoose-findorcreate');
 
 import { Job } from './job';
 import { Car } from './car';
@@ -23,7 +24,7 @@ export interface FindOrCreateResult<T> {
   doc: InstanceType<T>;
 }
 
-@plugin(findOrCreatePlugin)
+@plugin(findOrCreate)
 export class User extends Typegoose {
   @prop({ required: true })
   firstName: string;
