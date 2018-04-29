@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 
 import { Typegoose, prop, pre } from '../../typegoose';
-import {Decimal128} from 'bson';
+import { Decimal128 } from 'bson';
 
 @pre<Car>('save', function(next) {
   if (this.model === 'Trabant') {

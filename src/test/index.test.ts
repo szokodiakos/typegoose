@@ -10,8 +10,8 @@ import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { initDatabase, closeDatabase } from './utils/mongoConnect';
 import { getClassForDocument } from '../utils';
-import {Decimal128} from 'bson';
-import {fail} from 'assert';
+import { Decimal128 } from 'bson';
+import { fail } from 'assert';
 
 describe('Typegoose', () => {
   before(() => initDatabase());
