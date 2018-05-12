@@ -23,7 +23,7 @@ export interface BasePropOptions {
 
 export interface PropOptions extends BasePropOptions {
   ref?: any;
-  refType?: any;
+  refType?: 'number' | 'string' | 'Buffer' | 'ObjectID';
 }
 
 export interface ValidateNumberOptions {
@@ -86,11 +86,24 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   }
 
   const ref = rawOptions.ref;
+  let refType;
+
+  switch (rawOptions.refType) {
+    case 'number':
+      refType = mongoose.Schema.Types.Number;
+      break;
+    case 'string':
+      refType = mongoose.Schema.Types.String;
+      break;
+    case 'buffer':
+      refType = mongoose.Schema.Types.Buffer;
+      break;
+    default:
+      refType = mongoose.Schema.Types.ObjectId;
+      break;
+  }
+
   if (ref) {
-    let refType = mongoose.Schema.Types.ObjectId;
-    if (rawOptions.refType) {
-      refType = rawOptions.refType;
-    }
     schema[name][key] = {
       ...schema[name][key],
       type: refType,
@@ -101,10 +114,6 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
   const itemsRef = rawOptions.itemsRef;
   if (itemsRef) {
-    let refType = mongoose.Schema.Types.ObjectId;
-    if (rawOptions.refType) {
-      refType = rawOptions.refType;
-    }
     schema[name][key][0] = {
       ...schema[name][key][0],
       type: refType,
@@ -186,6 +195,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
 export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key: string) => {
   const Type = (Reflect as any).getMetadata('design:type', target, key);
+  const UnionType = (Reflect as any).getMetadata('design:type', target, key);
 
   if (!Type) {
     throw new NoMetadataError(key);
@@ -204,4 +214,5 @@ export const arrayProp = (options: ArrayPropOptions) => (target: any, key: strin
   baseProp(options, Type, target, key, true);
 };
 
-export type Ref<T> = T | ObjectID;
+export type RefType = number | string | ObjectID | Buffer;
+export type Ref<R, T extends RefType = ObjectID> = R | T;
