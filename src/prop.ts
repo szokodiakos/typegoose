@@ -23,6 +23,7 @@ export interface BasePropOptions {
 
 export interface PropOptions extends BasePropOptions {
   ref?: any;
+  refType?: any;
 }
 
 export interface ValidateNumberOptions {
@@ -86,9 +87,13 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
   const ref = rawOptions.ref;
   if (ref) {
+    let refType = mongoose.Schema.Types.ObjectId;
+    if (rawOptions.refType) {
+      refType = rawOptions.refType;
+    }
     schema[name][key] = {
       ...schema[name][key],
-      type: mongoose.Schema.Types.ObjectId,
+      type: refType,
       ref: ref.name,
     };
     return;
@@ -96,9 +101,13 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
 
   const itemsRef = rawOptions.itemsRef;
   if (itemsRef) {
+    let refType = mongoose.Schema.Types.ObjectId;
+    if (rawOptions.refType) {
+      refType = rawOptions.refType;
+    }
     schema[name][key][0] = {
       ...schema[name][key][0],
-      type: mongoose.Schema.Types.ObjectId,
+      type: refType,
       ref: itemsRef.name,
     };
     return;
