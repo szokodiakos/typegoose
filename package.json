@@ -6,10 +6,11 @@
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
+    "build:tests": "rimraf lib && cd src/test && tsc",
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && npm run cover",
-    "mocha": "npm run build && mocha ./lib --recursive",
-    "cover": "npm run build && istanbul cover _mocha -- lib --recursive -R spec",
+    "mocha": "npm run build:tests && mocha ./lib --recursive",
+    "cover": "npm run build:tests && istanbul cover _mocha -- lib --recursive -R spec",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
