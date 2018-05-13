@@ -320,6 +320,13 @@ incrementAge(this: InstanceType<User>) {
 }
 ```
 
+#### initMethod
+
+Post-init hooks are only called on documents that were actually fetched from the database. If you create a new instance of a document
+yourself, they don't run. Currently, the accepted solution in Mongoose is to add a method to the Schema and call Schema.queue() with it which will then run this method everytime a new instance is created (kind of a pre-init hook).
+
+The `initMethod` decorator marks a method to be such an automatically called initialize method. It works like `instanceMethod` in all other respects.
+
 ### Class decorators
 
 Mongoose allows the developer to add pre and post [hooks / middlewares](http://mongoosejs.com/docs/middleware.html) to the schema. With this it is possible to add document transformations and observations before or after validation, save and more.

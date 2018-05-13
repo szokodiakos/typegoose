@@ -1,6 +1,6 @@
 import { methods } from './data';
 
-type MethodType = 'instanceMethods' | 'staticMethods';
+type MethodType = 'instanceMethods' | 'staticMethods' | 'initMethods';
 
 const baseMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>, methodType: MethodType) => {
   if (descriptor === undefined) {
@@ -8,7 +8,7 @@ const baseMethod = (target: any, key: string, descriptor: TypedPropertyDescripto
   }
 
   let name;
-  if (methodType === 'instanceMethods') {
+  if (methodType === 'instanceMethods' || methodType === 'initMethods') {
     name = target.constructor.name;
   }
   if (methodType === 'staticMethods') {
@@ -31,3 +31,6 @@ export const staticMethod = (target: any, key: string, descriptor: TypedProperty
 
 export const instanceMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) =>
   baseMethod(target, key, descriptor, 'instanceMethods');
+
+export const initMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) =>
+  baseMethod(target, key, descriptor, 'initMethods');
