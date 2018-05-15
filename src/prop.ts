@@ -31,9 +31,13 @@ export interface ValidateNumberOptions {
 }
 
 export interface ValidateStringOptions {
+  lowercase?: boolean;
+  uppercase?: boolean;
+  trim?: boolean;
+  match?: RegExp | [RegExp, string];
+  enum?: string[];
   minlength?: number | [number, string];
   maxlength?: number | [number, string];
-  match?: RegExp | [RegExp, string];
 }
 
 export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
@@ -41,7 +45,15 @@ export type PropOptionsWithStringValidate = PropOptions & ValidateStringOptions;
 export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate;
 
 const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
-  (options.minlength || options.maxlength || options.match);
+  (
+    options.lowercase
+    || options.uppercase
+    || options.trim
+    || options.match
+    || options.enum
+    || options.minlength
+    || options.maxlength
+  );
 
 const isWithNumberValidate = (options: PropOptionsWithNumberValidate) =>
   (options.min || options.max);
@@ -170,7 +182,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   schema[name][key] = {
     ...schema[name][key],
     ...options,
-    type: new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {}),
+    type: new Schema({...subSchema}, supressSubschemaId ? {_id: false} : {}),
   };
   return;
 };
