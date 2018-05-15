@@ -42,9 +42,13 @@ export interface ValidateNumberOptions {
 }
 
 export interface ValidateStringOptions {
+  lowercase?: boolean;
+  uppercase?: boolean;
+  trim?: boolean;
+  match?: RegExp | [RegExp, string];
+  enum?: string[];
   minlength?: number | [number, string];
   maxlength?: number | [number, string];
-  match?: RegExp | [RegExp, string];
 }
 
 export interface TransformStringOptions {
@@ -67,7 +71,15 @@ export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions
 export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
 
 const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
-  options.minlength || options.maxlength || options.match;
+  (
+    options.lowercase
+    || options.uppercase
+    || options.trim
+    || options.match
+    || options.enum
+    || options.minlength
+    || options.maxlength
+  );
 
 const isWithStringTransform = (options: PropOptionsWithStringValidate) =>
   options.lowercase || options.uppercase || options.trim;
