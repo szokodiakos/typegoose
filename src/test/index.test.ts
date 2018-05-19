@@ -186,7 +186,7 @@ describe('Typegoose', () => {
 
     it('should trim', async () => {
       const trimmed = await StringValidators.create({
-        trim: 'trim my end    ',
+        trimmed: 'trim my end    ',
       });
       expect(trimmed.trimmed).equals('trim my end');
     });
