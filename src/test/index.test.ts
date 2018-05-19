@@ -5,6 +5,7 @@ import * as mongoose from 'mongoose';
 import { model as User, User as UserType } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
 import { model as Person, PersistentModel } from './models/person';
+import { model as StringValidators } from './models/stringValidators';
 import { PersonNested, AddressNested, PersonNestedModel } from './models/nested-object';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
@@ -168,6 +169,41 @@ describe('Typegoose', () => {
     expect(savedUser.previousJobs.length).to.be.above(0);
     _.map(savedUser.previousJobs, (prevJob) => {
       expect(prevJob.startedAt).to.be.ok;
+    });
+  });
+
+  describe('string validators', () => {
+    // TODO: Specify an identifier for the error messages, e. g. as a regex to the message content.
+    // Otherwise we could catch errors that have nothing to do with what is being tested.
+
+    it('should respect maxlength', () => {
+      expect(async () => {
+        await StringValidators.create({
+          maxlength: 'this is too long',
+        });
+      }).throws(mongoose.Error);
+    });
+
+    it('should trim', async () => {
+      const trimmed = await StringValidators.create({
+        trim: 'trim my end    ',
+      });
+      expect(trimmed.trimmed).equals('trim my end');
+    });
+
+    it('should uppercase', async () => {
+      const uppercased = await StringValidators.create({
+        uppercased: 'make me uppercase',
+      });
+      expect(uppercased.uppercased).equals('MAKE ME UPPERCASE');
+    });
+
+    it('should respect enum', async () => {
+      expect(async () => {
+        await StringValidators.create({
+          enum: 'i am not valid',
+        });
+      }).throws(mongoose.Error);
     });
   });
 });
