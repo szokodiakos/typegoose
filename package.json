@@ -21,13 +21,11 @@
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "license": "MIT",
   "dependencies": {
-    "lodash": "4.17.10",
-    "mongoose": "^5.0.0",
-    "reflect-metadata": "^0.1.12"
+    "lodash": "4.17.10"
   },
   "peerDependencies": {
     "mongoose": "^5.0.0",
-    "reflect-metadata": "^0.1.8"
+    "reflect-metadata": "^0.1.12"
   },
   "devDependencies": {
     "@types/chai": "4.1.3",
