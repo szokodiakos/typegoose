@@ -412,4 +412,4 @@ This is the logical 'and' of `mongoose.Model<InstanceType<T>>` and `T`, so that 
 ## Improvements
 
 * Add frequently used (currently not present) features if needed
-* Create moar tests (break down current huge one into multiple unit tests)
+* Create more tests (break down current huge one into multiple unit tests)
