@@ -9,7 +9,7 @@
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && npm run cover",
     "mocha": "npm run build && mocha ./lib --recursive --exit",
-    "cover": "npm run build && istanbul cover _mocha -- lib --recursive -R spec",
+    "cover": "npm run build && istanbul cover _mocha -- lib --recursive --exit -R spec",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
