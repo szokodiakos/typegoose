@@ -255,7 +255,7 @@ email: string;
 
 // or
 
-@prop({ validate: (value) => { new Promise(res => { res(isEmail(value)) }) })
+@prop({ validate: (value) => { return new Promise(res => { res(isEmail(value)) }) })
 email: string;
 
 // or
@@ -272,6 +272,7 @@ email: string;
 email: string;
 
 // you can also use multiple validators in an array.
+
 @prop({ validate: 
     [
         { 
