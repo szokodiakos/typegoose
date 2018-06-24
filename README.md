@@ -251,12 +251,12 @@ favouriteHexNumber: string;
 // you have to get your own `isEmail` function, this is a placeholder
 
 @prop({ validate: (value) => isEmail(value)})
-email: string;
+email?: string;
 
 // or
 
 @prop({ validate: (value) => { return new Promise(res => { res(isEmail(value)) }) })
-email: string;
+email?: string;
 
 // or
 
@@ -264,12 +264,12 @@ email: string;
     validator: val => isEmail(val), 
     message: `{VALUE} is not a valid email`
 }})
-email: string;
+email?: string;
 
 // or
 
 @prop({ validate: /\S+@\S+\.\S+/ })
-email: string;
+email?: string;
 
 // you can also use multiple validators in an array.
 
@@ -285,7 +285,7 @@ email: string;
         }
     ]
 })
-email: string;
+email?: string;
 ```
 
 Mongoose gives developers the option to create [virtual properties](http://mongoosejs.com/docs/api.html#schema_Schema-virtual). This means that actual database read/write will not occur these are just 'calculated properties'. A virtual property can have a setter and a getter. TypeScript also has a similar feature which Typegoose uses for virtual property definitions (using the `prop` decorator).
