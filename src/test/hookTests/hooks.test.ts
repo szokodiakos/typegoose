@@ -2,11 +2,13 @@ import { expect } from 'chai';
 
 import { model as Hook } from './hooktestModel';
 import { model as Dummy } from './dummy';
-import { initDatabase } from '../utils/mongoConnect';
+import { initDatabase, closeDatabase } from '../utils/mongoConnect';
 
 describe('Typegoose', () => {
   describe('Hooks', () => {
     before(() => initDatabase());
+
+    after(() => closeDatabase());
 
     it('should update the property using isModified during pre save hook', async () => {
       const hook = await Hook.create({
@@ -23,14 +25,14 @@ describe('Typegoose', () => {
       const dummy = await Dummy.create({ text: 'initial' });
 
       // text is changed in pre save hook
-      const dummyFromDb = await Dummy.findOne({ text: 'saved' });
+      const dummyFromDb = await Dummy.findOne({ text: 'saved' }).exec();
       expect(dummyFromDb).to.have.property('text', 'changed in post findOne hook');
     });
 
     it('should find the unexpected dummies because of pre and post hooks', async () => {
       const dummy = await Dummy.create([{ text: 'whatever' }, { text: 'whatever' }]);
 
-      const foundDummies = await Dummy.find({ text: 'saved'});
+      const foundDummies = await Dummy.find({ text: 'saved' }).exec();
 
       // pre-save-hook changed text to saved
       expect(foundDummies.length).to.be.above(2);

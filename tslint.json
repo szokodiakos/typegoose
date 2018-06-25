@@ -33,6 +33,10 @@
         "whitespace": [
             true,
             "check-module"
+        ],
+        "await-promise": [
+            true,
+            "Thenable"
         ]
     },
     "rulesDirectory": []
