@@ -4,14 +4,15 @@ configDotenv();
 import * as mongoose from 'mongoose';
 
 const MONGO_PORT = process.env.MONGO_PORT || 27017;
-const connect = () =>
+const connect =  () =>
   new Promise((resolve, reject) =>
     mongoose.connect(`mongodb://localhost:${MONGO_PORT}/typegoosetest`, {},
       (err) => (err ? reject(err) : resolve())),
   );
 
-export const initDatabase = () =>
-  connect().then(() => mongoose.connection.db.dropDatabase());
+export const initDatabase = async () => {
+  await connect();
+  await mongoose.connection.db.dropDatabase();
+};
 
-export const closeDatabase = () =>
-  mongoose.connection.close();
+export const closeDatabase = async () => await mongoose.connection.close();

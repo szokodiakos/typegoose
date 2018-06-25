@@ -82,7 +82,7 @@ export class User extends Typegoose {
 
   @staticMethod
   static findByAge(this: ModelType<User> & typeof User, age: number) {
-    return this.findOne({ age });
+    return this.findOne({ age }).exec();
   }
 
   @instanceMethod
