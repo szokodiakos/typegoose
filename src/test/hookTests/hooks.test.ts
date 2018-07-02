@@ -49,7 +49,7 @@ describe('Typegoose', () => {
 
       const foundUpdatedDummies = await Dummy.find({ text: 'updateManied'});
 
-      // pre-save-hook changed text to 'updateManied'
+      // pre-updateMany-hook changed text to 'updateManied'
       expect(foundUpdatedDummies.length).to.equal(2);
     });
   });
