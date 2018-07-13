@@ -175,6 +175,8 @@ describe('Typegoose', () => {
 describe('getClassForDocument()', () => {
   before(() => initDatabase());
 
+  after(() => closeDatabase());
+
   it('should return correct class type for document', async () => {
     const car = await Car.create({
       model: 'Tesla',
@@ -210,7 +212,7 @@ describe('getClassForDocument()', () => {
 
     await user.addCar(car);
 
-    user = await Person.findById(user.id).populate('cars');
+    user = await Person.findById(user.id).populate('cars').exec();
 
     // verify properties
     expect(user).to.have.property('createdAt');
