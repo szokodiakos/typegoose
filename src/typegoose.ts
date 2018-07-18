@@ -33,19 +33,7 @@ export class Typegoose {
 
   setModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
     const name = this.constructor.name;
-
-    // get schema of current model
-    let sch = this.buildSchema(name, schemaOptions);
-    // get parents class name
-    let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
-    // iterate trough all parents
-    while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
-      // extend schema
-      sch = this.buildSchema(parentCtor.name, schemaOptions, sch);
-      // next parent
-      parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
-    }
-
+    const sch = this.getSchema(name, schemaOptions);
     let model = mongoose.model.bind(mongoose);
     if (existingConnection) {
       model = existingConnection.model.bind(existingConnection);
@@ -59,6 +47,20 @@ export class Typegoose {
     return models[name] as ModelType<this> & T;
   }
 
+  getSchema(name: string, schemaOptions: mongoose.SchemaOptions) {
+    // get schema of current model
+    let sch = this.buildSchema(name, schemaOptions);
+    // get parents class name
+    let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
+    // iterate trough all parents
+    while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
+      // extend schema
+      sch = this.buildSchema(parentCtor.name, schemaOptions, sch);
+      // next parent
+      parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
+    }
+    return sch;
+  }
   private buildSchema(name: string, schemaOptions, sch?: mongoose.Schema) {
     const Schema = mongoose.Schema;
 
