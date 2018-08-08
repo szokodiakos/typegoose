@@ -47,7 +47,10 @@ export class Typegoose {
     return models[name] as ModelType<this> & T;
   }
 
-  getSchema(name: string, schemaOptions: mongoose.SchemaOptions) {
+  getSchema(
+    name: string = this.constructor.name,
+    schemaOptions?: mongoose.SchemaOptions,
+  ) {
     // get schema of current model
     let sch = this.buildSchema(name, schemaOptions);
     // get parents class name

@@ -15,6 +15,15 @@
 			],
 			"sourceMaps": true,
 			"preLaunchTask": "build"
+		}, {
+			"type": "node",
+			"request": "launch",
+			"name": "run testGetSchema",
+			"program": "${workspaceRoot}/node_modules/.bin/ts-node",
+			"args": [
+				"${workspaceRoot}/src/test/TestGetSchema.ts"
+			],
+			"sourceMaps": true
 		}
 	]
 }
