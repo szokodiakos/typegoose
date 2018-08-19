@@ -89,7 +89,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     schema[name][key] = {
       ...schema[name][key],
       type: mongoose.Schema.Types.ObjectId,
-      ref: ref,
+      ref,
     };
     return;
   } else if (ref) {
@@ -98,7 +98,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
       type: mongoose.Schema.Types.ObjectId,
       ref: ref.name,
     };
-    return;
+     return;
   }
 
   const itemsRef = rawOptions.itemsRef;
