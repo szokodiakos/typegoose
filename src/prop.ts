@@ -54,7 +54,7 @@ const isWithNumberValidate = (options: PropOptionsWithNumberValidate) =>
   (options.min || options.max);
 
 const baseProp = (rawOptions, Type, target, key, isArray = false) => {
-  const name = target.constructor.name;
+  const name = target.constructor.MODEL_NAME || target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {
     if (isGetterSetter.get) {
@@ -135,7 +135,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   }
 
   const instance = new Type();
-  const subSchema = schema[instance.constructor.name];
+  const subSchema = schema[instance.MODEL_NAME || instance.constructor.name];
   if (!subSchema && !isPrimitive(Type) && !isObject(Type)) {
     throw new InvalidPropError(Type.name, key);
   }

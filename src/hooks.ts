@@ -64,12 +64,20 @@ interface Hooks {
 const hooks: Hooks = {
   pre(...args) {
     return (constructor: any) => {
-      addToHooks(constructor.name, 'pre', args);
+      addToHooks(
+        constructor.MODEL_NAME || constructor.name,
+        'pre',
+        args,
+      );
     };
   },
   post(...args) {
     return (constructor: any) => {
-      addToHooks(constructor.name, 'post', args);
+      addToHooks(
+        constructor.MODEL_NAME || constructor.name,
+        'post',
+        args,
+      );
     };
   },
 };
