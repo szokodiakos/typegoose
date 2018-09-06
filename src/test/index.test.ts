@@ -137,7 +137,7 @@ describe('Typegoose', () => {
       expect(foundUser.doc).to.have.property('firstName', 'Jane');
 
       try {
-        const cloneUser = await User.create({
+        await User.create({
           _id: mongoose.Types.ObjectId(),
           firstName: 'John',
           lastName: 'Doe',
@@ -146,7 +146,6 @@ describe('Typegoose', () => {
           uniqueId: 'john-doe-20',
         });
       } catch (err) {
-        expect(err).to.have.property('name', 'MongoError');
         expect(err).to.have.property('code', 11000);
       }
     }
@@ -174,12 +173,12 @@ describe('Typegoose', () => {
   it('should add compound index', async () => {
     const user = await User.findOne();
     const car = await Car.findOne();
-    
+
     await Rating.create({ user: user._id, car: car._id, stars: 4 });
-    
-    // should fail, because user and car should be unique 
+
+    // should fail, because user and car should be unique
     const created = await Rating.create({ user: user._id, car: car._id, stars: 5 })
-      .then(() => true).catch(e => false);
+      .then(() => true).catch(() => false);
 
     expect(created).to.be.false;
   });

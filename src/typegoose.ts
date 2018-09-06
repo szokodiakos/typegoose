@@ -113,7 +113,7 @@ export class Typegoose {
     });
 
     const indices = Reflect.getMetadata('typegoose:indices', t) || [];
-    for (let index of indices) {
+    for (const index of indices) {
       sch.index(index.fields, index.options);
     }
 

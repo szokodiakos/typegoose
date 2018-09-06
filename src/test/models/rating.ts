@@ -19,7 +19,7 @@ export class Rating extends Typegoose {
   stars: number;
 
   @arrayProp({ items: Array })
-  location: [[Number]]
+  location: [[number]];
 }
 
 export const model = new Rating().getModelForClass(Rating);
