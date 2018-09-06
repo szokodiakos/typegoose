@@ -5,6 +5,7 @@ import * as mongoose from 'mongoose';
 import { model as User, User as UserType } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
 import { model as Person, PersistentModel } from './models/person';
+import { model as Rating } from './models/rating';
 import { PersonNested, AddressNested, PersonNestedModel } from './models/nested-object';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
@@ -168,6 +169,19 @@ describe('Typegoose', () => {
     _.map(savedUser.previousJobs, (prevJob) => {
       expect(prevJob.startedAt).to.be.ok;
     });
+  });
+
+  it('should add compound index', async () => {
+    const user = await User.findOne();
+    const car = await Car.findOne();
+    
+    await Rating.create({ user: user._id, car: car._id, stars: 4 });
+    
+    // should fail, because user and car should be unique 
+    const created = await Rating.create({ user: user._id, car: car._id, stars: 5 })
+      .then(() => true).catch(e => false);
+
+    expect(created).to.be.false;
   });
 });
 

@@ -437,6 +437,30 @@ UserModel.findOrCreate({ ... }).then(findOrCreateResult => {
 });
 ```
 
+#### index
+
+To declare compound indices or other advanced (eg. GeoJSON indices) `index` option of `@prop` decorator is not sufficient. For those cases use `@index`:
+
+```typescript
+@index({ article: 1, user: 1 }, { unique: true })
+@index({ location: '2dsphere'})
+export class Location extends Typegoose {
+  @prop()
+  article: number;
+
+  @prop()
+  user: number;
+
+  @prop()
+  stars: number;
+
+  @arrayProp({ items: Array })
+  location: [[Number]]
+}
+```
+
+For more info about creating indices refer to [MongoDB documentation](https://docs.mongodb.com/manual/indexes/).
+
 ### Types
 
 Some additional types were added to make Typegoose more user friendly.
