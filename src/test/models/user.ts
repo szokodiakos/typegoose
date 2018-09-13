@@ -74,7 +74,7 @@ export class User extends Typegoose {
   @arrayProp({ items: String, required: true })
   languages: string[];
 
-  @arrayProp({ items: Job })
+  @arrayProp({ items: Job, required:true })
   previousJobs?: Job[];
 
   @arrayProp({ itemsRef: Car })
