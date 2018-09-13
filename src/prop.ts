@@ -170,10 +170,10 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   }
 
   if (isArray) {
-    schema[name][key][0] = {
-      ...schema[name][key][0],
+    schema[name][key] = {
+      ...schema[name][key],
       ...options,
-      type: subSchema,
+      type: [subSchema],
     };
     return;
   }
