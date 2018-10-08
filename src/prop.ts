@@ -168,19 +168,20 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     };
     return;
   }
+  
+  const Schema = mongoose.Schema;
+
+  const supressSubschemaId = rawOptions._id === false;
 
   if (isArray) {
     schema[name][key][0] = {
       ...schema[name][key][0],
       ...options,
-      ...subSchema,
+      type: new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {}),
     };
     return;
   }
-
-  const Schema = mongoose.Schema;
-
-  const supressSubschemaId = rawOptions._id === false;
+  
   schema[name][key] = {
     ...schema[name][key],
     ...options,
