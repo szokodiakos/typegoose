@@ -1,30 +1,31 @@
 language: node_js
 services:
-  - mongodb
+- mongodb
 node_js:
-  - "lts/*"
+- lts/*
 env:
-  - USE_OLDEST_NPM_VERSIONS=0
-  - USE_OLDEST_NPM_VERSIONS=1
+- USE_OLDEST_NPM_VERSIONS=0
+- USE_OLDEST_NPM_VERSIONS=1
 before_install:
-  - |
-    if [ $USE_OLDEST_NPM_VERSIONS -eq 1 ]
-    then
-      # Test against oldest allowed versions in package.json - Use sed to remove ^ characters
-      sed -i 's/"\^/"/g' package.json
-      npm i mongoose@5.0.0 reflect-metadata@0.1.12
-    else
-      npm i mongoose reflect-metadata
-    fi
+- |
+  if [ $USE_OLDEST_NPM_VERSIONS -eq 1 ]
+  then
+    # Test against oldest allowed versions in package.json - Use sed to remove ^ characters
+    sed -i 's/"\^/"/g' package.json
+    npm i mongoose@5.0.0 reflect-metadata@0.1.12
+  else
+    npm i mongoose reflect-metadata
+  fi
 script:
-  - npm test
-  - npm run coveralls
+- npm test
+- npm run coveralls
 deploy:
   provider: npm
-  email: "szokodiakos@gmail.com"
+  email: benedikt.huss@gmail.com
   skip_cleanup: true
-  api_key: "N/HLbKkbEKPIISgHjjEi1gtBbexAwMWslXqkK1qnQSUDRtwwnIAc3xYZFhfRy0jThkKt8Jf3ATgt+luMcoR/LMDrAUXoATGuqn0unqC7bJKDvMeMTpliFCL+05XYv/TJmN+B4dqmTnzRun/f96ZPghbokm4MfCNYjGeY6jvE1ffdiu7NAnT4fXCfAcuH5rTkhdEZegJ89wKKUwHjX7mpg/Ofi/h36am4vlxOXZ25ErwQAX2XpaBgExWvUvbOFMZfHASOdSCa3WRwB0CvFdHRienfiWjNW85efao99xU2BPYpc2pq1MaebLKbWG7hB+OPuchG3XgP9XhYaMbGh/GGV1kstBwJqxSR4aT3OUAR4bDflwYz9kPDbDAKmco1oqA9GTXlKbtzHBpl0U9fWQz5EsHvDh1PcFu0GA4lXx7n6iO2RWnNsJepL5DvH1PyyDRMPov2bqk7ByjCmJEz+cxI/Js/hGch1SSjvX2r3XB7RCbvnWa72NeP1UlzN0bD7ZUjf86qTBuyhq8ohhREdalXS+oRq2neEhO5CMsjm74xbX0KRFfZe2q9Bi2hdycNAuVptDDHvpVTP2F20SWpkiQs5ToHQQiBKphY90SGbVtWJsvWBzAlueYCIguwgNHdmFicejAIGvZcE9hBo6Yoc2C3NOZJABsa+yeKkQw9MgcHaAg="
+  api_key:
+    secure: pNyluNoFqt4/mH0afzIdGnDHsDqjJTafh766eUIB2jriaEQ0v6DQ/JaTnsx8v7S7W8ibXM4xgoidbAbqs1Y7ZPYTMwlZTIlEa19CUtOdUnP+cT2V4feQMYMi3jlSMoOm7k56CaufFz2yUyGwvqMJFHspXyVbLnpdJWX9OOnL0E42NSBHhs+jBB3QdyLKIiQQzGBHAAsr/Yl2ot3k9ndfyzSPhGkvQWYeRn7AwulWg9LB8qiTFsEXPxtVQOo/tkVbF4pWpA99CZbaY/ibDzm9OYCl73qHMX0N8FG4eB1ByGGUnxGjAJWfvB2QWkZcsnH7ywJCJRjHjaOpkXHmPQVZ0i3F6fGcTg0vyhuQ9W3staYO+kxZa+Ol6EzAZSsUsgWepOJYMfW4w31PKwQsoJrz/efFNORzPfX4GmaRkqXBRfIdYgnrl7SFV3S6ljADPLo3rbAuNYjgZ+Ui7Ged1fHr5OESuEzhue8ldoEcWJGoC78+6UE40XFB0CSnugRt/LVe6JM1fov5LcuwCjtLYTiDR/AsMb8pX6fVlYIbox/zGMVghZlRwc/iSMn6+3RrQGB8f30l1vx+/M/Tb3sHiiTFyXa58uIwGisaQ39//LuwezrYG0sNwzqrV8YEahZxIx9AvqqZ9nGjjp4cKRQ0vt5t58f6Cr/vz1VHhvEtlKMmOA8=
   on:
-    branches: 
+    branches:
       only:
-        - master
+      - master
