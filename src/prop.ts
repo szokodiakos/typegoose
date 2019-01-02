@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 
+import 'reflect-metadata';
 import { schema, virtuals } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber } from './utils';
 import { InvalidPropError, NotNumberTypeError, NotStringTypeError, NoMetadataError } from './errors';
