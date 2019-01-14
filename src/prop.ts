@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 
 import 'reflect-metadata';
-import { getSchema } from './schema';
 import { schema, virtuals } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber } from './utils';
 import { InvalidPropError, NotNumberTypeError, NotStringTypeError, NoMetadataError } from './errors';
@@ -10,6 +9,8 @@ export type Func = (...args: any[]) => any;
 
 export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
 
+import { ObjectId, Mixed } from './mongoose';
+
 export interface BasePropOptions {
   required?: RequiredType;
   enum?: string[] | object;
@@ -17,7 +18,7 @@ export interface BasePropOptions {
   unique?: boolean;
   index?: boolean;
   sparse?: boolean;
-  type?: any;
+  mixed?: boolean;
   expires?: string | number;
 }
 
@@ -50,8 +51,8 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const name = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
 
-  if (rawOptions.type) {
-    schema[name][key] = isArray ? [rawOptions.type] : rawOptions.type;
+  if (rawOptions.mixed) {
+    schema[name][key] = Mixed;
     return;
   }
 
@@ -94,7 +95,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   if (ref) {
     schema[name][key] = {
       ...schema[name][key],
-      type: getSchema().Types.ObjectId,
+      type: ObjectId,
       ref: ref.name,
     };
     return;
@@ -104,8 +105,8 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   if (itemsRef) {
     schema[name][key][0] = {
       ...schema[name][key][0],
-      type: getSchema().Types.ObjectId,
-        ref: itemsRef.name,
+      type: ObjectId,
+      ref: itemsRef.name,
     };
     return;
   }

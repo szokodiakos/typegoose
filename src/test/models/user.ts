@@ -33,7 +33,7 @@ export class User extends Typegoose {
   @prop({ required: true })
   lastName: string;
 
-  @prop({ type: mongoose.Schema.Types.Mixed })
+  @prop({ mixed: true })
   importedData: any;
 
   @prop()
