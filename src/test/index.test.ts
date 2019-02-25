@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
@@ -170,7 +169,7 @@ describe('Typegoose', () => {
 
     expect(savedUser.languages).to.include('Hungarian');
     expect(savedUser.previousJobs.length).to.be.above(0);
-    _.map(savedUser.previousJobs, (prevJob) => {
+     savedUser.previousJobs.map((prevJob) => {
       expect(prevJob.startedAt).to.be.ok;
     });
   });
@@ -234,7 +233,7 @@ describe('getClassForDocument()', () => {
     expect(user).to.have.property('email', 'my@email.com');
 
     expect(user.cars.length).to.be.above(0);
-    _.map(user.cars, (currentCar: CarType) => {
+    user.cars.map((currentCar: CarType) => {
       expect(currentCar.model).to.be.ok;
     });
 
