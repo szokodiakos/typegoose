@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2015",
+    "target": "es2016",
     "module": "commonjs",
     "declaration": true,
     "experimentalDecorators": true,
@@ -9,7 +9,5 @@
     "outDir": "lib",
     "sourceMap": true
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }
