@@ -1,6 +1,4 @@
-import * as mongoose from 'mongoose';
-import * as _ from 'lodash';
-// tslint:disable-next-line:no-var-requires
+// import * as mongoose from 'mongoose';
 const findOrCreate = require('mongoose-findorcreate');
 
 import { Job } from './job';
@@ -16,7 +14,6 @@ import {
   InstanceType,
   staticMethod,
   instanceMethod,
-  post,
   plugin,
 } from '../../typegoose';
 
