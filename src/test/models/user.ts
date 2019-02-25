@@ -1,20 +1,20 @@
 // import * as mongoose from 'mongoose';
 const findOrCreate = require('mongoose-findorcreate');
 
-import { Job } from './job';
 import { Car } from './car';
 import { Gender, Genders } from '../enums/genders';
+import { Job } from './job';
 import { Role } from '../enums/role';
 import {
-  Ref,
-  prop,
   arrayProp,
-  Typegoose,
-  ModelType,
-  InstanceType,
-  staticMethod,
   instanceMethod,
+  InstanceType,
+  ModelType,
   plugin,
+  prop,
+  Ref,
+  staticMethod,
+  Typegoose,
 } from '../../typegoose';
 
 export interface FindOrCreateResult<T> {
