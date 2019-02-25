@@ -58,7 +58,7 @@ export class User extends Typegoose {
   @prop({ min: 10, max: 21 })
   age?: number;
 
-  @prop({ enum: _.values(Genders), required: true })
+  @prop({ enum: Object.values(Genders), required: true })
   gender: Gender;
 
   @prop({ enum: Role })
