@@ -24,11 +24,7 @@
   "typings": "lib/typegoose.d.ts",
   "author": "Akos Szokodi <akos@codingsans.com> (http://codingsans.com)",
   "license": "MIT",
-  "dependencies": {
-    "lodash": "~4.17.11",
-    "mongoose": "^5.4.15",
-    "reflect-metadata": "^0.1.13"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "mongoose": "^5.4.15",
     "reflect-metadata": "^0.1.13"
@@ -36,7 +32,6 @@
   "devDependencies": {
     "@types/chai": "4.1.3",
     "@types/dotenv": "4.0.3",
-    "@types/lodash": "4.14.108",
     "@types/mocha": "5.2.0",
     "@types/mongoose": "5.0.10",
     "@types/node": "8.10.0",

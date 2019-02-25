@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import * as _ from 'lodash';
 
 import { schema, virtuals, methods } from './data';
 import { isPrimitive, initAsObject, initAsArray, isString, isNumber, isObject } from './utils';
