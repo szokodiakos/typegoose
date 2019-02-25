@@ -1,9 +1,9 @@
-import * as _ from 'lodash';
+
 import * as mongoose from 'mongoose';
 
 import { schema, constructors } from './data';
 
-export const isPrimitive = (Type) => _.includes(['String', 'Number', 'Boolean', 'Date', 'Decimal128'], Type.name);
+export const isPrimitive = (Type) => ['String', 'Number', 'Boolean', 'Date'].includes(Type.name);
 
 export const isObject = (Type) => {
   let prototype = Type.prototype;
