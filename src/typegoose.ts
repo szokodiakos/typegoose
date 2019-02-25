@@ -97,20 +97,25 @@ export class Typegoose {
     }
 
     if (plugins[name]) {
-      _.forEach(plugins[name], (plugin) => {
+      for (const plugin of plugins[name]) {
         sch.plugin(plugin.mongoosePlugin, plugin.options);
-      });
+      }
     }
 
     const getterSetters = virtuals[name];
-    _.forEach(getterSetters, (value, key) => {
-      if (value.get) {
-        sch.virtual(key).get(value.get);
+    if (getterSetters) {
+      for (const key of Object.keys(getterSetters)) {
+        if (getterSetters[key].get) {
+          sch.virtual(key).get(getterSetters[key].get);
+        }
+
+        if (getterSetters[key].set) {
+          sch.virtual(key).set(getterSetters[key].set);
+        }
       }
-      if (value.set) {
-        sch.virtual(key).set(value.set);
-      }
-    });
+
+
+  }
 
     const indices = Reflect.getMetadata('typegoose:indices', t) || [];
     for (const index of indices) {
