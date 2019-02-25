@@ -1,4 +1,3 @@
-// import * as mongoose from 'mongoose';
 const findOrCreate = require('mongoose-findorcreate');
 
 import { Car } from './car';
@@ -64,7 +63,6 @@ export class User extends Typegoose {
   @arrayProp({ items: String, enum: Role, default: Role.Guest })
   roles: Role[];
 
-  // @prop({ required: true })
   @prop()
   job?: Job;
 
