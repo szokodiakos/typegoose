@@ -37,15 +37,15 @@
     "coveralls": "3.0.3",
     "dotenv": "5.0.1",
     "mocha": "5.2.0",
-    "mongoose": "^5.4.15",
+    "mongoose": "5.4.15",
     "mongoose-findorcreate": "3.0.0",
     "nyc": "13.3.0",
-    "prettier": "^1.16.4",
-    "prettier-tslint": "^0.4.2",
-    "reflect-metadata": "^0.1.13",
+    "prettier": "1.16.4",
+    "prettier-tslint": "0.4.2",
+    "reflect-metadata": "0.1.13",
     "rimraf": "2.6.2",
-    "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.18.0",
+    "tslint": "5.13.0",
+    "tslint-config-prettier": "1.18.0",
     "typescript": "2.9.2"
   }
 }
