@@ -7,7 +7,6 @@
   ],
   "jsRules": {},
   "rules": {
-    "prettier": true,
     "quotemark": false,
     "max-classes-per-file": false,
     "ordered-imports": false,
