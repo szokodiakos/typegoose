@@ -1,19 +1,41 @@
+/** @format */
+
 import * as mongoose from 'mongoose';
 
 import { schema, virtuals, methods } from './data';
-import { isPrimitive, initAsObject, initAsArray, isString, isNumber, isObject } from './utils';
-import { InvalidPropError, NotNumberTypeError, NotStringTypeError, NoMetadataError } from './errors';
+import {
+  isPrimitive,
+  initAsObject,
+  initAsArray,
+  isString,
+  isNumber,
+  isObject,
+} from './utils';
+import {
+  InvalidPropError,
+  NotNumberTypeError,
+  NotStringTypeError,
+  NoMetadataError,
+} from './errors';
 import { ObjectID } from 'bson';
 
 export type Func = (...args: any[]) => any;
 
-export type RequiredType = boolean | [boolean, string] | string | Func | [Func, string];
+export type RequiredType =
+  | boolean
+  | [boolean, string]
+  | string
+  | Func
+  | [Func, string];
 
 export type ValidatorFunction = (value: any) => boolean | Promise<boolean>;
-export type Validator = ValidatorFunction | RegExp | {
-    validator: ValidatorFunction,
-    message?: string,
-};
+export type Validator =
+  | ValidatorFunction
+  | RegExp
+  | {
+      validator: ValidatorFunction;
+      message?: string;
+    };
 
 export interface BasePropOptions {
   required?: RequiredType;
@@ -49,19 +71,29 @@ export interface TransformStringOptions {
 }
 
 export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
-export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
-export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate;
+export type PropOptionsWithStringValidate = PropOptions &
+  TransformStringOptions &
+  ValidateStringOptions;
+export type PropOptionsWithValidate =
+  | PropOptionsWithNumberValidate
+  | PropOptionsWithStringValidate;
 
 const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
-  (options.minlength || options.maxlength || options.match);
+  options.minlength || options.maxlength || options.match;
 
 const isWithStringTransform = (options: PropOptionsWithStringValidate) =>
-  (options.lowercase || options.uppercase || options.trim);
+  options.lowercase || options.uppercase || options.trim;
 
 const isWithNumberValidate = (options: PropOptionsWithNumberValidate) =>
-  (options.min || options.max);
+  options.min || options.max;
 
-const baseProp = (rawOptions, Type, target, key, isArray = false) => {
+const baseProp = (
+  rawOptions: any,
+  Type: any,
+  target: any,
+  key: any,
+  isArray = false
+) => {
   const name = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {
@@ -108,12 +140,12 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     };
     return;
   } else if (ref) {
-     schema[name][key] = {
+    schema[name][key] = {
       ...schema[name][key],
       type: mongoose.Schema.Types.ObjectId,
       ref: ref.name,
     };
-     return;
+    return;
   }
 
   const itemsRef = rawOptions.itemsRef;
@@ -129,7 +161,9 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const enumOption = rawOptions.enum;
   if (enumOption) {
     if (!Array.isArray(enumOption)) {
-      rawOptions.enum = Object.keys(enumOption).map((propKey) => enumOption[propKey]);
+      rawOptions.enum = Object.keys(enumOption).map(
+        propKey => enumOption[propKey]
+      );
     }
   }
 
@@ -153,7 +187,7 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     throw new InvalidPropError(Type.name, key);
   }
 
-  const { ["ref"]: r, ["items"]: i, ...options } = rawOptions;
+  const { ['ref']: r, ['items']: i, ...options } = rawOptions;
   if (isPrimitive(Type)) {
     if (isArray) {
       schema[name][key] = {
@@ -194,9 +228,13 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   const Schema = mongoose.Schema;
 
   const supressSubschemaId = rawOptions._id === false;
-  const virtualSchema = new Schema({ ...subSchema }, supressSubschemaId ? { _id: false } : {});
+  const virtualSchema = new Schema(
+    { ...subSchema },
+    supressSubschemaId ? { _id: false } : {}
+  );
 
-  const schemaInstanceMethods = methods.instanceMethods[instance.constructor.name];
+  const schemaInstanceMethods =
+    methods.instanceMethods[instance.constructor.name];
   if (schemaInstanceMethods) {
     virtualSchema.methods = schemaInstanceMethods;
   }
@@ -209,7 +247,10 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
   return;
 };
 
-export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key: string) => {
+export const prop = (options: PropOptionsWithValidate = {}) => (
+  target: any,
+  key: string
+) => {
   const Type = (Reflect as any).getMetadata('design:type', target, key);
 
   if (!Type) {
@@ -224,7 +265,10 @@ export interface ArrayPropOptions extends BasePropOptions {
   itemsRef?: any;
 }
 
-export const arrayProp = (options: ArrayPropOptions) => (target: any, key: string) => {
+export const arrayProp = (options: ArrayPropOptions) => (
+  target: any,
+  key: string
+) => {
   const Type = options.items;
   baseProp(options, Type, target, key, true);
 };

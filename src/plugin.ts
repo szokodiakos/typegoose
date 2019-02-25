@@ -1,6 +1,10 @@
+/** @format */
+
 import { plugins } from './data';
 
-export const plugin = (mongoosePlugin, options?) => (constructor: any) => {
+export const plugin = (mongoosePlugin: any, options?: any) => (
+  constructor: any
+) => {
   const name = constructor.name;
   if (!plugins[name]) {
     plugins[name] = [];
