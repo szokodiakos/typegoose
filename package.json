@@ -30,8 +30,8 @@
     "reflect-metadata": "^0.1.13"
   },
   "peerDependencies": {
-    "mongoose": "^5.0.0",
-    "reflect-metadata": "^0.1.12"
+    "mongoose": "^5.4.15",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/chai": "4.1.3",
