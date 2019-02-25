@@ -13,9 +13,7 @@
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && npm run cover",
     "mocha": "npm run build && mocha ./lib --recursive --exit",
-    "cover": "nyc npm run mocha",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "cover:report": "nyc report"
+    "cover": "nyc npm run mocha"
   },
   "repository": {
     "type": "git",
