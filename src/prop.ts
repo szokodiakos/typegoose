@@ -154,7 +154,6 @@ const baseProp = (rawOptions, Type, target, key, isArray = false) => {
     throw new InvalidPropError(Type.name, key);
   }
 
-  //const options = _.omit(rawOptions, ['ref', 'items']);
   const { ["ref"]: r, ["items"]: i, ...options } = rawOptions;
   if (isPrimitive(Type)) {
     if (isArray) {
