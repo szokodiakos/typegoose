@@ -13,7 +13,7 @@
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && npm run cover",
     "mocha": "npm run build && mocha ./lib --recursive --exit",
-    "cover": "nyc npm run mocha"
+    "cover": "nyc npm run mocha && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -33,9 +33,10 @@
     "@types/mongoose": "5.0.10",
     "@types/node": "8.10.0",
     "chai": "4.1.2",
-    "coveralls": "3.0.3",
+    "coveralls": "^3.0.3",
     "dotenv": "5.0.1",
     "mocha": "5.2.0",
+    "mocha-lcov-reporter": "^1.3.0",
     "mongoose-findorcreate": "3.0.0",
     "nyc": "13.3.0",
     "prettier": "1.16.4",
