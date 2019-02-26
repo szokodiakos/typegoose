@@ -12,7 +12,7 @@
     "build": "rimraf lib && tsc",
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && nyc npm run mocha",
-    "mocha": "npm run build && mocha ./lib --recursive --exit && npm run coverage",
+    "mocha": "npm run build && mocha ./lib --recursive --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
