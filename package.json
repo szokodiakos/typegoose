@@ -37,7 +37,6 @@
     "coveralls": "3.0.3",
     "dotenv": "5.0.1",
     "mocha": "5.2.0",
-    "mongoose": "^5.4.15",
     "mongoose-findorcreate": "3.0.0",
     "nyc": "13.3.0",
     "prettier": "1.16.4",
