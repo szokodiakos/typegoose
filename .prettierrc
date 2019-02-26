@@ -8,6 +8,6 @@
   "endOfLine": "auto",
   "insertPragma": true,
   "requirePragma": true,
-  "printWidth": 80,
+  "printWidth": 120,
   "proseWrap": "always"
 }

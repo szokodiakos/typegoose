@@ -2,9 +2,7 @@
 
 export class InvalidPropError extends Error {
   constructor(typeName, key: string) {
-    super(
-      `In property ${key}: ${typeName} is not a primitive type nor a Typegoose schema (Not extending it).`
-    );
+    super(`In property ${key}: ${typeName} is not a primitive type nor a Typegoose schema (Not extending it).`);
   }
 }
 

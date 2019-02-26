@@ -4,12 +4,7 @@ import { methods } from './data';
 
 type MethodType = 'instanceMethods' | 'staticMethods';
 
-const baseMethod = (
-  target: any,
-  key: string,
-  descriptor: TypedPropertyDescriptor<any>,
-  methodType: MethodType
-) => {
+const baseMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>, methodType: MethodType) => {
   if (descriptor === undefined) {
     descriptor = Object.getOwnPropertyDescriptor(target, key);
   }
@@ -33,14 +28,8 @@ const baseMethod = (
   };
 };
 
-export const staticMethod = (
-  target: any,
-  key: string,
-  descriptor: TypedPropertyDescriptor<any>
-) => baseMethod(target, key, descriptor, 'staticMethods');
+export const staticMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) =>
+  baseMethod(target, key, descriptor, 'staticMethods');
 
-export const instanceMethod = (
-  target: any,
-  key: string,
-  descriptor: TypedPropertyDescriptor<any>
-) => baseMethod(target, key, descriptor, 'instanceMethods');
+export const instanceMethod = (target: any, key: string, descriptor: TypedPropertyDescriptor<any>) =>
+  baseMethod(target, key, descriptor, 'instanceMethods');
