@@ -11,9 +11,9 @@
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
     "lint": "tslint --project tsconfig.json",
-    "test": "npm run lint && npm run cover",
+    "test": "npm run lint && nyc npm run mocha",
     "mocha": "npm run build && mocha ./lib --recursive --exit",
-    "cover": "nyc npm run mocha && nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
