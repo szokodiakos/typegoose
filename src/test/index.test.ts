@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 
 import { model as User, User as UserType } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
-import { model as Person, PersistentModel } from './models/person';
+import { model as Person } from './models/person';
 import { model as Rating } from './models/rating';
 import { PersonNested, AddressNested, PersonNestedModel } from './models/nested-object';
 import { Genders } from './enums/genders';
@@ -264,24 +264,26 @@ describe('getClassForDocument()', () => {
   });
 
   // faild validation will need to be checked
-  // it('Should validate Decimal128', async () => {
-  //   try {
-  //     await Car.create({
-  //       model: 'Tesla',
-  //       price: 'NO DECIMAL',
-  //     });
-  //     fail('Validation must fail.');
-  //   } catch (e) {
-  //     expect(e).to.be.a.instanceof((mongoose.Error as any).ValidationError);
-  //   }
-  //   const car = await Car.create({
-  //     model: 'Tesla',
-  //     price: mongoose.Types.Decimal128.fromString('123.45'),
-  //   });
-  //   const foundCar = await Car.findById(car._id).exec();
-  //   expect(foundCar.price).to.be.a.instanceof(mongoose.Types.Decimal128);
-  //   expect(foundCar.price.toString()).to.eq('123.45');
-  // });
+  it('Should validate Decimal128', async () => {
+    try {
+      await Car.create({
+        model: 'Tesla',
+        price: 'NO DECIMAL',
+      });
+      // fail('Validation must fail.');
+
+    } catch (e) {
+
+      expect(e).to.be.a.instanceof((mongoose.Error as any).ValidationError);
+    }
+    const car = await Car.create({
+      model: 'Tesla',
+      price: mongoose.Types.Decimal128.fromString('123.45'),
+    });
+    const foundCar = await Car.findById(car._id).exec();
+    expect(foundCar.price).to.be.a.instanceof(mongoose.Types.Decimal128);
+    expect(foundCar.price.toString()).to.eq('123.45');
+  });
 
   it('Should validate email', async () => {
     try {
