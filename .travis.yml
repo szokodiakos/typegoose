@@ -18,7 +18,6 @@ before_install:
   fi
 script:
 - npm test
-after_success:
 - npm run coverage
 deploy:
   provider: npm
