@@ -3,7 +3,7 @@
 import { plugins } from './data';
 
 export const plugin = (mongoosePlugin: any, options?: any) => (constructor: any) => {
-  const name = constructor.name;
+  const name: string = constructor.name;
   if (!plugins[name]) {
     plugins[name] = [];
   }

@@ -66,7 +66,7 @@ const isWithStringTransform = (options: PropOptionsWithStringValidate) =>
 const isWithNumberValidate = (options: PropOptionsWithNumberValidate) => options.min || options.max;
 
 const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = false) => {
-  const name = target.constructor.name;
+  const name: string = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {
     if (isGetterSetter.get) {
