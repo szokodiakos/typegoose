@@ -8,7 +8,7 @@
     "emitDecoratorMetadata": true,
     "allowJs": false,
     "outDir": "lib",
-    "sourceMap": true
+    "inlineSourceMap": true
   },
   "include": ["src/**/*.ts"]
 }
