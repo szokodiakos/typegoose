@@ -1,6 +1,9 @@
 # Typegoose
 
 [![Build Status](https://travis-ci.org/szokodiakos/typegoose.svg?branch=master)](https://travis-ci.org/szokodiakos/typegoose)
+
+[![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master)](https://coveralls.io/github/szokodiakos/typegoose?branch=master)
+
 [![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master)](https://coveralls.io/github/szokodiakos/typegoose?branch=master)
 [![npm](https://img.shields.io/npm/dt/typegoose.svg)]()
 
@@ -275,8 +278,8 @@ nickName?: string;
 
     // or
 
-    @prop({ validate: { 
-        validator: val => isEmail(val), 
+    @prop({ validate: {
+        validator: val => isEmail(val),
         message: `{VALUE} is not a valid email`
     }})
     email?: string;
@@ -288,14 +291,14 @@ nickName?: string;
 
     // you can also use multiple validators in an array.
 
-    @prop({ validate: 
+    @prop({ validate:
         [
-            { 
-                validator: val => isEmail(val), 
-                message: `{VALUE} is not a valid email`
-            }, 
             {
-                validator: val => isBlacklisted(val), 
+                validator: val => isEmail(val),
+                message: `{VALUE} is not a valid email`
+            },
+            {
+                validator: val => isBlacklisted(val),
                 message: `{VALUE} is blacklisted`
             }
         ]
