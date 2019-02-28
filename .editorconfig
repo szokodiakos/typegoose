@@ -1,7 +1,24 @@
 root = true
 
-[*.ts]
+[*]
+charset = utf-8
 end_of_line = lf
-insert_final_newline = true
-indent_size = 2
 indent_style = space
+
+[*.ts]
+indent_size = 2
+quote_type = single
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.md]
+indent_size = 4
+quote_type = auto
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.json]
+indent_size = 2
+quote_type = double
+insert_final_newline = true
+trim_trailing_whitespace = true
