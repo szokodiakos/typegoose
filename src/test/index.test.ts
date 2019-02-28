@@ -9,7 +9,7 @@ import { PersonNested, AddressNested, PersonNestedModel } from './models/nested-
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { initDatabase, closeDatabase } from './utils/mongoConnect';
-import { getClassForDocument } from '../utils';
+import { getClassForDocument, initAsObject } from '../utils';
 import { fail } from 'assert';
 
 describe('Typegoose', () => {
@@ -296,3 +296,12 @@ describe('getClassForDocument()', () => {
     }
   });
 });
+
+it('should be adding default property "writable" when initAsObject() is called',()=>{
+  const property = 'name'
+  const key = 'key'
+  const testObj: object = initAsObject(property, key);
+  // const testing = new Object(testObj)
+  const descriptor1 = Object.getOwnPropertyDescriptor(testObj, property)
+  expect(descriptor1.writable).to.be.true
+})
