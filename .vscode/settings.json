@@ -1,5 +1,8 @@
 {
-    "editor.formatOnSave": true,
-    "prettier.printWidth": 120,
-    "editor.wordWrapColumn": 120
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "prettier.printWidth": 120,
+  "editor.wordWrapColumn": 120,
+  "prettier.tslintIntegration": true,
+  "tslint.jsEnable": true
 }
