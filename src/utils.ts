@@ -24,7 +24,7 @@ export const isNumber = (Type: any) => Type.name === 'Number';
 
 export const isString = (Type: any) => Type.name === 'String';
 
-export const initAsObject = (name, key) => {
+export const initAsObject = (name: any, key: any) => {
   if (!schema[name]) {
     schema[name] = {};
   }
