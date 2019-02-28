@@ -297,11 +297,11 @@ describe('getClassForDocument()', () => {
   });
 });
 
-it('should be adding default property "writable" when initAsObject() is called',()=>{
-  const property = 'name'
-  const key = 'key'
-  const testObj: object = initAsObject(property, key);
-  // const testing = new Object(testObj)
-  const descriptor1 = Object.getOwnPropertyDescriptor(testObj, property)
-  expect(descriptor1.writable).to.be.true
-})
+// it('should be adding default property "writable" when initAsObject() is called',()=>{
+//   const property = 'name'
+//   const key = 'key'
+//   const testObj: object = initAsObject(property, key);
+//   // const testing = new Object(testObj)
+//   const descriptor1 = Object.getOwnPropertyDescriptor(testObj, property)
+//   expect(descriptor1.writable).to.be.true
+// })
