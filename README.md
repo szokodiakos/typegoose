@@ -1,8 +1,6 @@
 # Typegoose 5.5.2
 
-[![Build Status](https://travis-ci.org/szokodiakos/typegoose.svg?branch=master)](https://travis-ci.org/szokodiakos/typegoose)
-[![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master)](https://coveralls.io/github/szokodiakos/typegoose?branch=master)
-[![npm](https://img.shields.io/npm/dt/typegoose.svg)]()
+[![Build Status](https://travis-ci.org/szokodiakos/typegoose.svg?branch=master)](https://travis-ci.org/szokodiakos/typegoose) [![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master#new)](https://coveralls.io/github/szokodiakos/typegoose?branch=master#new) [![npm](https://img.shields.io/npm/dt/typegoose.svg)]()
 
 Define Mongoose models using TypeScript classes.
 
