@@ -4,7 +4,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master)](https://coveralls.io/github/szokodiakos/typegoose?branch=master)
 
-[![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master)](https://coveralls.io/github/szokodiakos/typegoose?branch=master#new)
+[![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master#new)](https://coveralls.io/github/szokodiakos/typegoose?branch=master#new)
 
 [![npm](https://img.shields.io/npm/dt/typegoose.svg)]()
 
