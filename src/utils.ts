@@ -4,8 +4,7 @@ import * as mongoose from 'mongoose';
 
 import { schema, constructors } from './data';
 
-export const isPrimitive = (Type: any) =>
-  ['String', 'Number', 'Boolean', 'Date'].includes(Type.name);
+export const isPrimitive = (Type: any) => ['String', 'Number', 'Boolean', 'Date'].includes(Type.name);
 
 export const isObject = (Type: any) => {
   let prototype = Type.prototype;
@@ -44,7 +43,6 @@ export const initAsArray = (name: any, key: any) => {
 };
 
 export const getClassForDocument = (document: mongoose.Document): any => {
-  const modelName = (document.constructor as mongoose.Model<typeof document>)
-    .modelName;
+  const modelName = (document.constructor as mongoose.Model<typeof document>).modelName;
   return constructors[modelName];
 };

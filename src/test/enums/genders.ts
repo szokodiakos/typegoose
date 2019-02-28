@@ -1,3 +1,5 @@
+/** @format */
+
 export type Gender = 'male' | 'female';
 
 export const Genders = {

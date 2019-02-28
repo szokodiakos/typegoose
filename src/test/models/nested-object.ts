@@ -1,4 +1,5 @@
-import * as mongoose from 'mongoose';
+/** @format */
+
 import * as tg from '../../typegoose';
 
 export class AddressNested {

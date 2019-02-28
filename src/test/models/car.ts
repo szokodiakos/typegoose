@@ -1,3 +1,5 @@
+/** @format */
+
 import * as mongoose from 'mongoose';
 
 import { Typegoose, prop, pre } from '../../typegoose';

@@ -1,3 +1,5 @@
+/** @format */
+
 import { instanceMethod, prop } from '../../typegoose';
 
 export class JobType {

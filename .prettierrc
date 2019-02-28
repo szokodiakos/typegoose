@@ -5,7 +5,7 @@
   "singleQuote": true,
   "useTabs": false,
   "arrowParens": "avoid",
-  "endOfLine": "auto",
+  "endOfLine": "lf",
   "insertPragma": true,
   "requirePragma": true,
   "printWidth": 120,

@@ -1,3 +1,5 @@
+/** @format */
+
 import * as tg from '../../typegoose';
 import { Car } from './car';
 

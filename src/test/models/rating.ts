@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+/** @format */
 
 import { index } from '../..';
 import { Ref, arrayProp } from '../../prop';
@@ -7,7 +7,7 @@ import { Car } from './car';
 import { User } from './user';
 
 @index({ car: 1, user: 1 }, { unique: true })
-@index({ location: '2dsphere'})
+@index({ location: '2dsphere' })
 export class Rating extends Typegoose {
   @prop({ ref: Car })
   car: Ref<Car>;

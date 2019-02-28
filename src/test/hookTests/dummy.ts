@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+/** @format */
 
 import { prop, Typegoose, pre, post } from '../../typegoose';
 
@@ -11,10 +11,10 @@ import { prop, Typegoose, pre, post } from '../../typegoose';
 @pre<Dummy>('updateMany', async function() {
   this._update.text = 'updateManied';
 })
-@post<Dummy>('find', (result) => {
+@post<Dummy>('find', result => {
   result[0].text = 'changed in post find hook';
 })
-@post<Dummy>('findOne', (result) => {
+@post<Dummy>('findOne', result => {
   result.text = 'changed in post findOne hook';
 })
 export class Dummy extends Typegoose {

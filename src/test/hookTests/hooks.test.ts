@@ -1,5 +1,6 @@
-import { expect } from 'chai';
+/** @format */
 
+import { expect } from 'chai';
 import { model as Hook } from './hooktestModel';
 import { model as Dummy } from './dummy';
 import { initDatabase } from '../utils/mongoConnect';
@@ -30,7 +31,7 @@ describe('Typegoose', () => {
     it('should find the unexpected dummies because of pre and post hooks', async () => {
       const dummy = await Dummy.create([{ text: 'whatever' }, { text: 'whatever' }]);
 
-      const foundDummies = await Dummy.find({ text: 'saved'});
+      const foundDummies = await Dummy.find({ text: 'saved' });
 
       // pre-save-hook changed text to saved
       expect(foundDummies.length).to.be.above(2);
@@ -41,13 +42,16 @@ describe('Typegoose', () => {
     it('should test the updateMany hook', async () => {
       const dummy = await Dummy.insertMany([{ text: 'foobar42' }, { text: 'foobar42' }]);
 
-      await Dummy.updateMany({
-        text: 'foobar42',
-      }, {
-        text: 'lorem ipsum',
-      });
+      await Dummy.updateMany(
+        {
+          text: 'foobar42',
+        },
+        {
+          text: 'lorem ipsum',
+        }
+      );
 
-      const foundUpdatedDummies = await Dummy.find({ text: 'updateManied'});
+      const foundUpdatedDummies = await Dummy.find({ text: 'updateManied' });
 
       // pre-updateMany-hook changed text to 'updateManied'
       expect(foundUpdatedDummies.length).to.equal(2);
