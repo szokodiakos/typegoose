@@ -1,4 +1,4 @@
-# Typegoose 5.5.2
+# Typegoose
 
 [![Build Status](https://travis-ci.org/szokodiakos/typegoose.svg?branch=master)](https://travis-ci.org/szokodiakos/typegoose)
 [![Coverage Status](https://coveralls.io/repos/github/szokodiakos/typegoose/badge.svg?branch=master#feb282019)](https://coveralls.io/github/szokodiakos/typegoose?branch=master)
