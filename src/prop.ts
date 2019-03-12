@@ -30,6 +30,8 @@ export interface BasePropOptions {
   sparse?: boolean;
   expires?: string | number;
   _id?: boolean;
+  get?: (value: any) => any;
+  set?: (value: any) => any;
 }
 
 export interface PropOptions extends BasePropOptions {
