@@ -34,6 +34,7 @@ export interface BasePropOptions {
 
 export interface PropOptions extends BasePropOptions {
   ref?: any;
+  alias?: string;
 }
 
 export interface ValidateNumberOptions {

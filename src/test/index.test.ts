@@ -19,7 +19,7 @@ describe('Typegoose', () => {
 
   it('should create a User with connections', async () => {
     const car = await Car.create({
-      model: 'Tesla',
+      m: 'Tesla',
       version: 'ModelS',
       price: mongoose.Types.Decimal128.fromString('50123.25'),
     });
@@ -234,7 +234,7 @@ describe('getClassForDocument()', () => {
 
     expect(user.cars.length).to.be.above(0);
     user.cars.map((currentCar: CarType) => {
-      expect(currentCar.model).to.be.ok;
+      expect(currentCar.m).to.be.ok;
     });
 
     // verify methods
