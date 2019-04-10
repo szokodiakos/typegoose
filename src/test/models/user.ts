@@ -78,6 +78,12 @@ export class User extends Typegoose {
   @arrayProp({ itemsRef: Car })
   previousCars?: Ref<Car>[];
 
+  @prop({
+    set: (value) => value ? Buffer.from(value).toString('base64') : value,
+    get: (value: any) => value ? Buffer.from(value, 'base64').toString('ascii') : value,
+  })
+  encodedKey?: string;
+
   @staticMethod
   static findByAge(this: ModelType<User> & typeof User, age: number) {
     return this.findOne({ age });
