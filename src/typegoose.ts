@@ -109,11 +109,11 @@ export class Typegoose {
     if (getterSetters) {
       for (const key of Object.keys(getterSetters)) {
         if (getterSetters[key].get) {
-          sch.virtual(key).get(getterSetters[key].get);
+          sch.virtual(key, getterSetters[key].options).get(getterSetters[key].get);
         }
 
         if (getterSetters[key].set) {
-          sch.virtual(key).set(getterSetters[key].set);
+          sch.virtual(key, getterSetters[key].options).set(getterSetters[key].set);
         }
       }
     }

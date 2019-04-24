@@ -53,9 +53,15 @@ export interface TransformStringOptions {
   trim?: boolean; // whether to always call .trim() on the value
 }
 
+export interface VirtualOptions {
+  ref: string;
+  localField: string;
+  foreignField: string;
+}
+
 export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
 export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
-export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate;
+export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
 
 const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
   options.minlength || options.maxlength || options.match;
@@ -79,6 +85,7 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       virtuals[name][key] = {
         ...virtuals[name][key],
         get: isGetterSetter.get,
+        options: rawOptions
       };
     }
 
@@ -92,6 +99,7 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       virtuals[name][key] = {
         ...virtuals[name][key],
         set: isGetterSetter.set,
+        options: rawOptions
       };
     }
     return;
