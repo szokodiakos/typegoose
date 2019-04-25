@@ -27,3 +27,9 @@ export class NoMetadataError extends Error {
     );
   }
 }
+
+export class UndefinedSchemaError extends Error {
+  constructor(key: string) {
+    super(`No schema definitions available for "${key}" property. Ensure there is a proplike decorator in your class definition.`);
+  }
+}

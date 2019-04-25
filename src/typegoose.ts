@@ -6,6 +6,7 @@ import * as mongoose from 'mongoose';
 (mongoose as any).Promise = global.Promise;
 
 import { constructors, hooks, methods, models, plugins, schema, virtuals } from './data';
+import { UndefinedSchemaError } from './errors';
 
 export * from './method';
 export * from './prop';
@@ -47,9 +48,7 @@ export class Typegoose {
     // iterate trough all parents
     while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
       // extend schema only if we have a definition available for it
-      if(schema[parentCtor.name]) {
-        sch = this.buildSchema<T>(t, parentCtor.name, schemaOptions, sch);
-      }
+      sch = this.buildSchema<T>(t, parentCtor.name, schemaOptions, sch);
       // next parent
       parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
     }
@@ -71,9 +70,14 @@ export class Typegoose {
     const Schema = mongoose.Schema;
 
     if (!sch) {
+      if(!schema[name]){
+        throw new UndefinedSchemaError(name);
+      }
       sch = schemaOptions ? new Schema(schema[name], schemaOptions) : new Schema(schema[name]);
     } else {
-      sch.add(schema[name]);
+      if(schema[name]){
+        sch.add(schema[name]);
+      }
     }
 
     const staticMethods = methods.staticMethods[name];
