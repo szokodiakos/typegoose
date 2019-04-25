@@ -10,6 +10,7 @@
   "scripts": {
     "start": "npm run build && node ./lib/typegoose.js",
     "build": "rimraf lib && tsc",
+    "prepare": "npm run build",
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && nyc npm run mocha",
     "mocha": "npm run build && mocha ./lib --recursive --exit",
@@ -37,7 +38,7 @@
     "dotenv": "5.0.1",
     "mocha": "5.2.0",
     "mocha-lcov-reporter": "^1.3.0",
-    "mongoose": "^5.4.15",
+    "mongoose": "^5.5.3",
     "mongoose-findorcreate": "3.0.0",
     "nyc": "13.3.0",
     "prettier": "1.16.4",
