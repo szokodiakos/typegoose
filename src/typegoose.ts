@@ -46,8 +46,10 @@ export class Typegoose {
     let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
     // iterate trough all parents
     while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
-      // extend schema
-      sch = this.buildSchema<T>(t, parentCtor.name, schemaOptions, sch);
+      // extend schema only if we have a definition available for it
+      if(schema[parentCtor.name]) {
+        sch = this.buildSchema<T>(t, parentCtor.name, schemaOptions, sch);
+      }
       // next parent
       parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
     }
