@@ -1,6 +1,7 @@
 /** @format */
 
 import * as mongoose from 'mongoose';
+// import {  } from "util";
 
 import { schema, constructors } from './data';
 
@@ -42,6 +43,10 @@ export const initAsArray = (name: any, key: any) => {
     schema[name][key] = [{}];
   }
 };
+
+export const isMap = (Type: any) => {
+  return Map.prototype === Type.prototype;
+}
 
 export const getClassForDocument = (document: mongoose.Document): any => {
   const modelName = (document.constructor as mongoose.Model<typeof document>)

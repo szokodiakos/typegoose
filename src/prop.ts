@@ -3,7 +3,7 @@
 import * as mongoose from 'mongoose';
 
 import { schema, virtuals, methods } from './data';
-import { isPrimitive, initAsObject, initAsArray, isString, isNumber, isObject } from './utils';
+import { isPrimitive, initAsObject, initAsArray, isString, isNumber, isObject, isMap } from './utils';
 import { InvalidPropError, NotNumberTypeError, NotStringTypeError, NoMetadataError } from './errors';
 import { ObjectID } from 'bson';
 
@@ -32,6 +32,7 @@ export interface BasePropOptions {
   _id?: boolean;
   get?: (value: any) => any;
   set?: (value: any) => any;
+  of?: any;
 }
 
 export interface PropOptions extends BasePropOptions {
@@ -184,6 +185,15 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       ...schema[name][key],
       ...options,
       type: Object,
+    };
+    return;
+  }
+
+  if (isMap(Type) && !subSchema) {
+    schema[name][key] = {
+      ...schema[name][key],
+      ...options,
+      type: Map,
     };
     return;
   }
