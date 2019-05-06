@@ -68,8 +68,6 @@ const isWithNumberValidate = (options: PropOptionsWithNumberValidate) => options
 const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = false, isMap = false) => {
   const name: string = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
-  // tslint:disable-next-line:no-console
-  console.log(Type);
   if (isGetterSetter) {
     if (isGetterSetter.get) {
       if (!virtuals[name]) {
@@ -170,12 +168,11 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       return;
     }
     if (isMap) {
-      // tslint:disable-next-line:no-console
-      console.log(`WE're here`);
       schema[name][key] = {
         ...schema[name][key],
         ...options,
         type: Map,
+        of: Type,
       };
       return;
     }
@@ -207,6 +204,18 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     return;
   }
 
+  if (isMap) {
+    schema[name][key] = {
+      ...schema[name][key],
+      type: Map,
+      ...options
+    };
+    schema[name][key].of = {
+      ...schema[name][key].of,
+      ...subSchema,
+    };
+    return;
+  }
   const Schema = mongoose.Schema;
 
   const supressSubschemaId = rawOptions._id === false;

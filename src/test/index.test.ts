@@ -5,6 +5,7 @@ import { model as User, User as UserType } from './models/user';
 import { model as Car, Car as CarType } from './models/car';
 import { model as Person } from './models/person';
 import { model as Rating } from './models/rating';
+import { model as InternetUser } from './models/internet-user';
 import { PersonNested, AddressNested, PersonNestedModel } from './models/nested-object';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
@@ -186,6 +187,33 @@ describe('Typegoose', () => {
 
     expect(created).to.be.false;
   });
+
+  it(`should add dynamic fields using map`, async () => {
+    const user = await InternetUser.create({
+      socialNetworks: {
+        'twitter': 'twitter account',
+        'facebook': 'facebook account',
+      },
+      sideNotes: {
+        'day1': {
+          content: 'day1',
+          link: 'url'
+        },
+        'day2': {
+          content: 'day2',
+          link: 'url//2'
+        },
+      }
+    });
+    expect(user).to.be.ok;
+    expect(user).to.have.property('socialNetworks').to.be.instanceOf(Map);
+    expect(user.socialNetworks.get('twitter')).to.be.eq('twitter account');
+    expect(user.socialNetworks.get('facebook')).to.be.eq('facebook account');
+    expect(user).to.have.property('sideNotes').to.be.instanceOf(Map);
+    expect(user.sideNotes.get('day1')).to.have.property('content', 'day1');
+    expect(user.sideNotes.get('day1')).to.have.property('link', 'url');
+    expect(user.sideNotes.has('day2')).to.be.true;
+  })
 });
 
 describe('getClassForDocument()', () => {
