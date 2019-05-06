@@ -178,6 +178,17 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     return;
   }
 
+  if (isMap(Type) && !subSchema) {
+    const defaults = { default: new Map };
+    schema[name][key] = {
+      ...schema[name][key],
+      ...defaults,
+      ...options,
+      type: Map,
+    };
+    return;
+  }
+
   // If the 'Type' is not a 'Primitive Type' and no subschema was found treat the type as 'Object'
   // so that mongoose can store it as nested document
   if (isObject(Type) && !subSchema) {
@@ -185,15 +196,6 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       ...schema[name][key],
       ...options,
       type: Object,
-    };
-    return;
-  }
-
-  if (isMap(Type) && !subSchema) {
-    schema[name][key] = {
-      ...schema[name][key],
-      ...options,
-      type: Map,
     };
     return;
   }
