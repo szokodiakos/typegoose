@@ -25,8 +25,14 @@ export interface GetModelForClassOptions {
 
 export class Typegoose {
   getModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
+    let collection = ""
+    if (schemaOptions && schemaOptions.collection) {
+      collection = "_" + schemaOptions.collection
+    }
     const name = this.constructor.name;
-    if (!models[name]) {
+    const nameWithCollection = name + collection;
+
+    if (!models[nameWithCollection]) {
       this.setModelForClass(t, {
         existingMongoose,
         schemaOptions,
@@ -34,11 +40,19 @@ export class Typegoose {
       });
     }
 
-    return models[name] as ModelType<this> & T;
+    return models[nameWithCollection] as ModelType<this> & T;
   }
 
   setModelForClass<T>(t: T, { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}) {
+
+    let collection = ""
+    // check if schema provides collection name
+    if (schemaOptions && schemaOptions.collection) {
+      collection = "_" + schemaOptions.collection
+    }
     const name = this.constructor.name;
+    // append collection name to constructor class name
+    const nameWithCollection = name + collection;
 
     // get schema of current model
     let sch = this.buildSchema<T>(t, name, schemaOptions);
@@ -58,11 +72,11 @@ export class Typegoose {
     } else if (existingMongoose) {
       model = existingMongoose.model.bind(existingMongoose);
     }
-
-    models[name] = model(name, sch);
+    // create/save model with modified key
+    models[nameWithCollection] = model(nameWithCollection, sch);
     constructors[name] = this.constructor;
 
-    return models[name] as ModelType<this> & T;
+    return models[nameWithCollection] as ModelType<this> & T;
   }
 
   private buildSchema<T>(t: T, name: string, schemaOptions: any, sch?: mongoose.Schema) {
