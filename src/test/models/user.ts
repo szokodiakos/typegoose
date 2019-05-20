@@ -63,6 +63,9 @@ export class User extends Typegoose {
   @arrayProp({ items: String, enum: Role, default: Role.Guest })
   roles: Role[];
 
+  @arrayProp({ items: String, enum: Role, default: void 0 })
+  extraRoles?: Role[];
+
   @prop()
   job?: Job;
 
@@ -74,6 +77,9 @@ export class User extends Typegoose {
 
   @arrayProp({ items: Job })
   previousJobs?: Job[];
+
+  @arrayProp({ items: Job, default: void 0 })
+  futureJobs?: Job[];
 
   @arrayProp({ itemsRef: Car })
   previousCars?: Ref<Car>[];

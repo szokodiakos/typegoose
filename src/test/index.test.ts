@@ -55,6 +55,9 @@ describe('Typegoose', () => {
       }, {
         title: 'Manager',
       }],
+      futureJobs: [{
+        title: 'Mr President',
+      }],
       previousCars: [trabant.id, zastava.id],
     });
 
