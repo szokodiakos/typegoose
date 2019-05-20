@@ -97,6 +97,9 @@ describe('Typegoose', () => {
       expect(janitor).to.have.property('title', 'Janitor');
       expect(manager).to.have.property('title', 'Manager');
 
+      const [president] = foundUser.futureJobs;
+      expect(president).not.to.have.property('_id')
+
       expect(foundUser).to.have.property('previousCars').to.have.length(2);
 
       const [foundTrabant, foundZastava] = foundUser.previousCars;

@@ -191,7 +191,10 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       schema[name][key] = {
         ...schema[name][key][0],
         ...options,
-        type: [subSchema],
+        type: [{
+          ...(options._id === false ? { _id: false } : {}),
+          ...subSchema,
+        }],
       }
       return;
     }

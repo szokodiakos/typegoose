@@ -78,7 +78,11 @@ export class User extends Typegoose {
   @arrayProp({ items: Job })
   previousJobs?: Job[];
 
-  @arrayProp({ items: Job, default: void 0 })
+  @arrayProp({
+    items: Job,
+    _id: false,
+    default: void 0,
+  })
   futureJobs?: Job[];
 
   @arrayProp({ itemsRef: Car })
