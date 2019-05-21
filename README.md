@@ -347,6 +347,33 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
     previousCars?: Ref<Car>[];
     ```
 
+### mapProp(options)
+
+The `mapProp` is a `prop` decorator which makes it possible to create map schema properties.
+
+The options object accepts `enum` and `default`, just like `prop`  decorator. In addition to these the following properties are accepted:
+
+- `of`  : This will tell Typegoose that the Map value consists of primitives (if `String`, `Number`, or other primitive type is given) or this is an array which consists of subdocuments (if it's extending the `Typegoose` class).
+
+    ```typescript
+    class Car extends Typegoose{}
+    
+    @mapProp({ of: Car })
+    keys: Map<string, Car>;
+    ```
+
+- `mapDefault` : This will set the default value for the map.
+    ```typescript
+    enum ProjectState {
+        WORKING = 'working',
+        BROKEN = 'broken',
+        MAINTAINANCE = 'maintainance',
+    }
+    
+    @mapProp({of: String, enum: ProjectState,mapDefault: { 'MainProject' : ProjectState.WORKING }})
+    projects: Map<string, ProjectState>;
+    ```
+
 ### Method decorators
 
 In Mongoose we can attach two types of methods for our schemas: static (model) methods and instance methods. Both of them are supported by Typegoose.

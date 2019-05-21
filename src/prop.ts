@@ -65,7 +65,7 @@ const isWithStringTransform = (options: PropOptionsWithStringValidate) =>
 
 const isWithNumberValidate = (options: PropOptionsWithNumberValidate) => options.min || options.max;
 
-const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = false) => {
+const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = false, isMap = false) => {
   const name: string = target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {
@@ -157,13 +157,24 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     throw new InvalidPropError(Type.name, key);
   }
 
-  const { ['ref']: r, ['items']: i, ...options } = rawOptions;
+  const { ['ref']: r, ['items']: i, ['of']: o, ...options } = rawOptions;
   if (isPrimitive(Type)) {
     if (isArray) {
       schema[name][key] = {
         ...schema[name][key][0],
         ...options,
         type: [Type],
+      };
+      return;
+    }
+    if (isMap) {
+      const { mapDefault } = options;
+      delete options.mapDefault;
+      schema[name][key] = {
+        ...schema[name][key],
+        type: Map,
+        default: mapDefault,
+        of: {type: Type, ...options},
       };
       return;
     }
@@ -195,6 +206,18 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
     return;
   }
 
+  if (isMap) {
+    schema[name][key] = {
+      ...schema[name][key],
+      type: Map,
+      ...options
+    };
+    schema[name][key].of = {
+      ...schema[name][key].of,
+      ...subSchema,
+    };
+    return;
+  }
   const Schema = mongoose.Schema;
 
   const supressSubschemaId = rawOptions._id === false;
@@ -227,10 +250,18 @@ export interface ArrayPropOptions extends BasePropOptions {
   items?: any;
   itemsRef?: any;
 }
+export interface MapPropOptions extends BasePropOptions {
+  of?: any;
+  mapDefault?: any;
+}
 
 export const arrayProp = (options: ArrayPropOptions) => (target: any, key: string) => {
   const Type = options.items;
   baseProp(options, Type, target, key, true);
 };
 
+export const mapProp = (options: MapPropOptions) => (target: any, key: string) => {
+  const Type = options.of;
+  baseProp(options, Type, target, key, false, true);
+};
 export type Ref<T> = T | ObjectID;
