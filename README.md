@@ -347,7 +347,7 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
     previousCars?: Ref<Car>[];
     ```
 
-### mapProp(options)
+#### mapProp(options)
 
 The `mapProp` is a `prop` decorator which makes it possible to create map schema properties.
 
