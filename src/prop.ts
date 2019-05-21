@@ -168,11 +168,13 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       return;
     }
     if (isMap) {
+      const { mapDefault } = options;
+      delete options.mapDefault;
       schema[name][key] = {
         ...schema[name][key],
-        ...options,
         type: Map,
-        of: Type,
+        default: mapDefault,
+        of: {type: Type, ...options},
       };
       return;
     }
@@ -250,6 +252,7 @@ export interface ArrayPropOptions extends BasePropOptions {
 }
 export interface MapPropOptions extends BasePropOptions {
   of?: any;
+  mapDefault?: any;
 }
 
 export const arrayProp = (options: ArrayPropOptions) => (target: any, key: string) => {

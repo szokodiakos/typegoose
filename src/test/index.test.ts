@@ -203,7 +203,8 @@ describe('Typegoose', () => {
           content: 'day2',
           link: 'url//2'
         },
-      }
+      },
+      projects: {},
     });
     expect(user).to.be.ok;
     expect(user).to.have.property('socialNetworks').to.be.instanceOf(Map);
@@ -323,4 +324,17 @@ describe('getClassForDocument()', () => {
       expect(e).to.be.a.instanceof((mongoose.Error as any).ValidationError);
     }
   });
+
+  it(`Should Validate Map`, async () => {
+    try {
+      await InternetUser.create({
+        projects: {
+          p1: 'project'
+        }
+      });
+      fail('Validation Should Fail');
+    } catch (e) {
+      expect(e).to.be.a.instanceof((mongoose.Error as any).ValidationError);
+    }
+  })
 });
