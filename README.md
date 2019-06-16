@@ -10,7 +10,7 @@ Define Mongoose models using TypeScript classes.
 
 ```typescript
 import { prop, Typegoose, ModelType, InstanceType } from 'typegoose';
-import * as mongoose from 'mongoose';
+import mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost:27017/test');
 
