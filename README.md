@@ -388,6 +388,8 @@ class Schema extends Typegoose {
 }
 ```
 
+For arrays, use `@prop({ itemsRefPath: 'name'})`
+
 ### Method decorators
 
 In Mongoose we can attach two types of methods for our schemas: static (model) methods and instance methods. Both of them are supported by Typegoose.
