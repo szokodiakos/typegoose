@@ -28,7 +28,7 @@ export class Inventory extends Typegoose {
     name: string
 
     @prop({ refPath: 'refItemPathName', required: true})
-    _kind: Ref<Beverage | Scooter>
+    kind: Ref<Beverage | Scooter>
 }
 
 export const ScooterModel = new Scooter().getModelForClass(Scooter);

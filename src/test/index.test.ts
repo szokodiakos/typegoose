@@ -230,7 +230,7 @@ describe('Typegoose', () => {
 
     const in1 = new Inventory({
         refItemPathName: 'Beverage',
-        _kind: sprite,
+        kind: sprite,
         count: 10,
         value: 1.99
     })
@@ -238,15 +238,18 @@ describe('Typegoose', () => {
 
     const in2 = new Inventory({
         refItemPathName: 'Scooter',
-        _kind: vespa,
+        kind: vespa,
         count: 1,
         value: 1099.98
     })
     await in2.save()
 
     // I should now have two "inventory" items, with different embedded reference documents.
-    const items = await Inventory.find({}).populate('_kind')
-    expect((items[0]._kind as typeof Beverage).isDecaf).to.be.true
+    const items = await Inventory.find({}).populate('kind')
+    expect((items[0].kind as typeof Beverage).isDecaf).to.be.true
+
+    // wrong type to make typescript happy
+    expect((items[1].kind as typeof Beverage).isDecaf).to.be.undefined
   })
 });
 
