@@ -49,6 +49,7 @@
     "typescript": "3.5.1"
   },
   "dependencies": {
+    "bson": "^4.0.2",
     "reflect-metadata": "^0.1.13"
   }
 }
