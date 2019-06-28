@@ -37,6 +37,7 @@ export interface BasePropOptions {
 
 export interface PropOptions extends BasePropOptions {
   ref?: any;
+  refPath?: string;
 }
 
 export interface ValidateNumberOptions {
@@ -56,9 +57,18 @@ export interface TransformStringOptions {
   trim?: boolean; // whether to always call .trim() on the value
 }
 
+export interface VirtualOptions {
+  ref: string;
+  localField: string;
+  foreignField: string;
+  justOne: boolean;
+  /** Set to true, when it is an "virtual populate-able" */
+  overwrite: boolean;
+}
+
 export type PropOptionsWithNumberValidate = PropOptions & ValidateNumberOptions;
 export type PropOptionsWithStringValidate = PropOptions & TransformStringOptions & ValidateStringOptions;
-export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate;
+export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOptionsWithStringValidate | VirtualOptions;
 
 const isWithStringValidate = (options: PropOptionsWithStringValidate) =>
   options.minlength || options.maxlength || options.match;
@@ -82,6 +92,7 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       virtuals[name][key] = {
         ...virtuals[name][key],
         get: isGetterSetter.get,
+        options: rawOptions,
       };
     }
 
@@ -95,6 +106,7 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       virtuals[name][key] = {
         ...virtuals[name][key],
         set: isGetterSetter.set,
+        options: rawOptions,
       };
     }
     return;
@@ -129,6 +141,26 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
       ...schema[name][key][0],
       type: mongoose.Schema.Types.ObjectId,
       ref: itemsRef.name,
+    };
+    return;
+  }
+
+  const refPath = rawOptions.refPath;
+  if (refPath && typeof refPath === 'string') {
+    schema[name][key] = {
+      ...schema[name][key],
+      type: mongoose.Schema.Types.ObjectId,
+      refPath,
+    };
+    return;
+  }
+
+  const itemsRefPath = rawOptions.itemsRefPath;
+  if (refPath && typeof refPath === 'string') {
+    schema[name][key][0] = {
+      ...schema[name][key][0],
+      type: mongoose.Schema.Types.ObjectId,
+      refPath,
     };
     return;
   }
@@ -201,10 +233,13 @@ const baseProp = (rawOptions: any, Type: any, target: any, key: any, isArray = f
   }
 
   if (isArray) {
-    schema[name][key][0] = {
+    schema[name][key] = {
       ...schema[name][key][0],
       ...options,
-      ...subSchema,
+      type: [{
+        ...(typeof options._id !== 'undefined' ? {_id: options._id} : {}),
+        ...subSchema,
+      }],
     };
     return;
   }
@@ -240,6 +275,7 @@ export const prop = (options: PropOptionsWithValidate = {}) => (target: any, key
 export interface ArrayPropOptions extends BasePropOptions {
   items?: any;
   itemsRef?: any;
+  itemsRefPath?: any;
 }
 
 export const arrayProp = (options: ArrayPropOptions) => (target: any, key: string) => {

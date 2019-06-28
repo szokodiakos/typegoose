@@ -235,6 +235,15 @@ nickName?: string;
     @prop({ default: 'Nick' })
     nickName?: string;
     ```
+    
+  - `_id`: When false, no \_id is added to the subdocument
+
+    ```typescript
+    class Car extends Typegoose {}
+    
+    @prop({ _id: false })
+    car?: Car;
+    ```
 
   - `ref`: By adding the `ref` option with another Typegoose class as value, a Mongoose reference property will be created. The type of the property on the Typegoose extending class should be `Ref<T>` (see Types section).
 
@@ -346,6 +355,40 @@ Note that unfortunately the [reflect-metadata](https://github.com/rbuckton/refle
     @arrayProp({ itemsRef: Car })
     previousCars?: Ref<Car>[];
     ```
+
+### Dynamic References
+Mongoose supports the concept of [dynamic references](https://mongoosejs.com/docs/populate.html#dynamic-ref): which is, an item-specific model reference instead of a model-specific reference.
+```js
+const Comment = new Schema({
+    body: { type: String, required: true },
+    on: { type: Schema.Types.ObjectId, required: true, refPath: 'onModel' },
+    onModel: { type: String, required: true, enum: ['BlogPost', 'Product']}
+})
+
+// later
+const post = new BlogPost()
+const comment = new Comment({
+    body: 'First!'
+    on: post,
+    onModel: 'BlogPost'
+})
+```
+
+This is now supported with `@prop({refPath: 'string' })`.  You will need to expose the field containing the referenced model name as a `@prop()` as well.
+```ts
+class Schema extends Typegoose {
+    @prop()
+    body: string
+
+    @prop({ required: true, refPath: 'onModel' })
+    on: Ref<BlogPost | Product>
+
+    @prop()
+    onModel: string
+}
+```
+
+For arrays, use `@prop({ itemsRefPath: 'name'})`
 
 ### Method decorators
 
@@ -486,6 +529,8 @@ Some additional types were added to make Typegoose more user friendly.
 #### InstanceType<T>
 
 This is basically the logical 'and' of the `T` and the `mongoose.Document`, so that both the Mongoose instance properties/functions and the user defined properties/instance methods are available on the instance.
+
+Note: TypeScript has its own InstanceType, you should import it from Typegoose
 
 #### ModelType<T>
 

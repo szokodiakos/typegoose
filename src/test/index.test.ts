@@ -6,11 +6,14 @@ import { model as Car, Car as CarType } from './models/car';
 import { model as Person } from './models/person';
 import { model as Rating } from './models/rating';
 import { PersonNested, AddressNested, PersonNestedModel } from './models/nested-object';
+import { InventoryModel as Inventory, BeverageModel as Beverage, ScooterModel as Scooter } from './models/inventory'
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { initDatabase, closeDatabase } from './utils/mongoConnect';
 import { getClassForDocument } from '../utils';
 import { fail } from 'assert';
+import { Virtual, VirtualSub } from "./models/virtualprop";
+import { ObjectID } from "bson";
 
 describe('Typegoose', () => {
   before(() => initDatabase());
@@ -188,6 +191,68 @@ describe('Typegoose', () => {
 
     expect(created).to.be.false;
   });
+
+  it("should add and populate the virtual properties", async () => {
+    const virtualModel = new Virtual().getModelForClass(Virtual);
+    const virtualSubModel = new VirtualSub().getModelForClass(VirtualSub);
+
+    const virtual1 = await new virtualModel({ dummyVirtual: "dummyVirtual1" } as Virtual).save();
+    const virtualsub1 = await new virtualSubModel({ dummy: "virtualSub1", virtual: virtual1._id } as VirtualSub).save();
+    const virtualsub2 = await new virtualSubModel({ dummy: "virtualSub2", virtual: new ObjectID() } as VirtualSub).save();
+    const virtualsub3 = await new virtualSubModel({ dummy: "virtualSub3", virtual: virtual1._id } as VirtualSub).save();
+
+    const newfound = await virtualModel.findById(virtual1._id).populate("virtualSubs").exec();
+
+    expect(newfound.dummyVirtual).to.be.equal("dummyVirtual1");
+    expect(newfound.virtualSubs).to.not.be.an("undefined");
+    expect(newfound.virtualSubs[0].dummy).to.be.equal("virtualSub1");
+    expect(newfound.virtualSubs[0]._id.toString()).to.be.equal(virtualsub1._id.toString());
+    expect(newfound.virtualSubs[1].dummy).to.be.equal("virtualSub3");
+    expect(newfound.virtualSubs[1]._id.toString()).to.be.equal(virtualsub3._id.toString());
+    expect(newfound.virtualSubs).to.not.include(virtualsub2);
+  });
+
+  it('Should support dynamic references via refPath', async () => {
+    const sprite = new Beverage({
+        isDecaf: true,
+        isSugarFree: false
+    })
+    await sprite.save()
+
+    const cokeZero = new Beverage({
+        isDecaf: false,
+        isSugarFree: true
+    })
+    await sprite.save()
+
+    const vespa = new Scooter({
+        makeAndModel: 'Vespa'
+    })
+    await vespa.save()
+
+    const in1 = new Inventory({
+        refItemPathName: 'Beverage',
+        kind: sprite,
+        count: 10,
+        value: 1.99
+    })
+    await in1.save()
+
+    const in2 = new Inventory({
+        refItemPathName: 'Scooter',
+        kind: vespa,
+        count: 1,
+        value: 1099.98
+    })
+    await in2.save()
+
+    // I should now have two "inventory" items, with different embedded reference documents.
+    const items = await Inventory.find({}).populate('kind')
+    expect((items[0].kind as typeof Beverage).isDecaf).to.be.true
+
+    // wrong type to make typescript happy
+    expect((items[1].kind as typeof Beverage).isDecaf).to.be.undefined
+  })
 });
 
 describe('getClassForDocument()', () => {
