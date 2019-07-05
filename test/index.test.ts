@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
 import { fail } from 'assert';
-import { Ref } from '../prop';
-import { getClassForDocument } from '../utils';
+import { Ref } from '../src/prop';
+import { getClassForDocument } from '../src/utils';
 import { Genders } from './enums/genders';
 import { Role } from './enums/role';
 import { Car as CarType, model as Car } from './models/car';

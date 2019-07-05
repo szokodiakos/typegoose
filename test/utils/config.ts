@@ -21,8 +21,8 @@ enum EConfig {
 import * as fs from 'fs';
 const env: NodeJS.ProcessEnv = process.env; // just to write less
 
-let path: string = env.CONFIG ? env.CONFIG : './src/test/config.json';
-path = fs.existsSync(path) ? path : './src/test/config_default.json';
+let path: string = env.CONFIG ? env.CONFIG : './test/config.json';
+path = fs.existsSync(path) ? path : './test/config_default.json';
 
 const configRAW: Readonly<IConfig> =
   JSON.parse(fs.readFileSync(path).toString());
