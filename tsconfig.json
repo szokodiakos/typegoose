@@ -13,9 +13,7 @@
     "emitDecoratorMetadata": true,
     "allowJs": false,
     "outDir": "lib",
-    "inlineSourceMap": true,
-    "incremental": true,
-    "tsBuildInfoFile": "./.tsbuildinfo"
+    "inlineSourceMap": true
   },
   "include": [
     "src/**/*.ts"
