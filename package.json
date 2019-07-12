@@ -16,7 +16,7 @@
     "watch": "tsc -w",
     "lint": "tslint --project tsconfig.json",
     "test": "npm run lint && nyc npm run mocha",
-    "mocha": "npm run build && mocha \"./test/*.ts\"",
+    "mocha": "npm run build && mocha \"./test/*.ts\" --timeout 15000",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "clean": "rimraf lib && rm .tsbuildinfo && rimraf .nyc_output && rimraf coverage"
   },
