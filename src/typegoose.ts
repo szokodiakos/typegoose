@@ -44,17 +44,7 @@ export class Typegoose {
   ) {
     const name = this.constructor.name;
 
-    // get schema of current model
-    let sch = this.buildSchema<T>(t, name, schemaOptions);
-    // get parents class name
-    let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
-    // iterate trough all parents
-    while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
-      // extend schema
-      sch = this.buildSchema<T>(t, parentCtor.name, schemaOptions, sch);
-      // next parent
-      parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
-    }
+    const sch = this.buildPublicSchema(existingMongoose, schemaOptions)
 
     let model = mongoose.model.bind(mongoose);
     if (existingConnection) {
@@ -67,6 +57,24 @@ export class Typegoose {
     constructors[name] = this.constructor;
 
     return models[name] as ModelType<this> & T;
+  }
+
+  public buildPublicSchema<T>(
+    t: T,  { existingMongoose, schemaOptions }: GetModelForClassOptions = {}
+  ){
+    const name = this.constructor.name;
+
+    // get schema of current model
+    let sch = this.buildSchema<T>(t, name, schemaOptions);
+    // get parents class name
+    let parentCtor = Object.getPrototypeOf(this.constructor.prototype).constructor;
+    // iterate trough all parents
+    while (parentCtor && parentCtor.name !== 'Typegoose' && parentCtor.name !== 'Object') {
+      // extend schema
+      sch = this.buildSchema<T>(t, parentCtor.name, schemaOptions, sch);
+      // next parent
+      parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
+    }
   }
 
   private buildSchema<T>(t: T, name: string, schemaOptions: any, sch?: mongoose.Schema) {
