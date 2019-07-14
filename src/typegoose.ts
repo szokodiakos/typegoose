@@ -44,7 +44,7 @@ export class Typegoose {
   ) {
     const name = this.constructor.name;
 
-    const sch = this.buildPublicSchema(existingMongoose, schemaOptions)
+    const sch = this.buildPublicSchema<T>(existingMongoose, schemaOptions)
 
     let model = mongoose.model.bind(mongoose);
     if (existingConnection) {
@@ -75,6 +75,7 @@ export class Typegoose {
       // next parent
       parentCtor = Object.getPrototypeOf(parentCtor.prototype).constructor;
     }
+    return sch
   }
 
   private buildSchema<T>(t: T, name: string, schemaOptions: any, sch?: mongoose.Schema) {
