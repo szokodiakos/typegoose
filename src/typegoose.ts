@@ -16,7 +16,7 @@ export { getClassForDocument } from './utils';
 export type InstanceType<T> = T & mongoose.Document;
 export type ModelType<T> = mongoose.Model<InstanceType<T>> & T;
 
-export interface GetModelForClassOptions {
+export interface ModelForClassOptions {
   /** An Existing Mongoose Connection */
   existingMongoose?: mongoose.Mongoose;
   /** Supports all Mongoose's Schema Options */
@@ -42,7 +42,7 @@ export class Typegoose {
    */
   public getModelForClass<T>(
     t: T,
-    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
+    { existingMongoose, schemaOptions, existingConnection }: ModelForClassOptions = {}
   ) {
     const name = this.constructor.name;
     if (!models[name]) {
@@ -68,23 +68,32 @@ export class Typegoose {
    */
   public setModelForClass<T>(
     t: T,
-    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
+    { existingMongoose, schemaOptions, existingConnection }: ModelForClassOptions = {}
+  ) {
+    const sch = this.buildSchema<T>(t, { existingMongoose, schemaOptions });
+
+    return this.buildModel(sch, { existingMongoose, existingConnection });
+  }
+
+  /**
+   * Build a model from the Given Schema
+   * @param sch The Schema to build from
+   * @param __namedParameters Options
+   */
+  public buildModel<T>(
+    sch: mongoose.Schema<any>,
+    { existingMongoose, existingConnection }: ModelForClassOptions = {}
   ) {
     const name = this.constructor.name;
 
-    const sch = this.buildSchema<T>(t, { existingMongoose, schemaOptions });
-
-    let model = mongoose.model.bind(mongoose);
+    let model = mongoose.model.bind(mongoose) as typeof mongoose.model;
     if (existingConnection) {
       model = existingConnection.model.bind(existingConnection);
     } else if (existingMongoose) {
       model = existingMongoose.model.bind(existingMongoose);
     }
 
-    models[name] = model(name, sch);
-    constructors[name] = this.constructor;
-
-    return models[name] as ModelType<this> & T;
+    return _buildModel(model(name, sch), name);
   }
 
   /**
@@ -93,7 +102,7 @@ export class Typegoose {
    * @param schemaOptions Options for the Schema
    * @returns Returns the Build Schema
    */
-  public buildSchema<T>(t: T, { schemaOptions }: GetModelForClassOptions = {}) {
+  public buildSchema<T>(t: T, { schemaOptions }: ModelForClassOptions = {}) {
     const name = this.constructor.name;
 
     // get schema of current model
@@ -187,4 +196,39 @@ function _buildSchema<T>(t: T, name: string, schemaOptions: any, sch?: mongoose.
   }
 
   return sch;
+}
+
+// This below are Functions that dont need to be in the class
+
+/**
+ * Add a model to the models Array & the constructors Array
+ * @private
+ * @param model The Model to add
+ * @param param1 
+ */
+function _buildModel<T extends mongoose.Model<any>>(model: T, name: string) {
+  models[name] = model;
+  constructors[name] = model.constructor;
+
+  return models[name] as ModelType<T> & T;
+}
+
+/**
+ * Build a Model from a given Schema & the given Discriminator
+ * @param from The Model to build From
+ * @param id The Identifier like in Mongoose
+ * @param sch The Build Schema (from .buildSchema)
+ * @param t Optional class to set the name, defaults to param id
+ */
+export function buildDiscriminator<T extends Typegoose, Z>(
+  from: ModelType<T>, id: string, sch: mongoose.Schema<T>, t?: Z
+) {
+  const model = from.discriminator(id, sch);
+
+  let name = id;
+  if (t && t.constructor.name) {
+    name = t.constructor.name;
+  }
+
+  return _buildModel(model, name);
 }
