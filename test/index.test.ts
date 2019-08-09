@@ -8,6 +8,7 @@ import { suite as HookTest } from './tests/hooks.test';
 import { suite as ShouldAddTest } from './tests/shouldAdd.test';
 import { suite as StringValidatorTests } from './tests/stringValidator.test';
 import { suite as TypeguardsTest } from './tests/typeguards.test';
+import { suite as TypeAliasTest } from './tests/typeAlias.test';
 
 import { connect, disconnect } from './utils/mongooseConnect';
 
@@ -30,4 +31,6 @@ describe('Typegoose', () => {
   describe('String Validators', StringValidatorTests.bind(this));
 
   describe('getClassForDocument()', GCFDTest.bind(this));
+
+  describe('Type Alias', TypeAliasTest.bind(this));
 });

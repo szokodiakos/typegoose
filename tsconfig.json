@@ -1,9 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": [
-      "esnext"
-    ],
+    "lib": ["esnext"],
     "removeComments": true,
     "module": "commonjs",
     "moduleResolution": "node",
@@ -17,7 +15,5 @@
     "incremental": true,
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
-  "include": [
-    "src/**/*.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }
