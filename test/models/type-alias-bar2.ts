@@ -16,4 +16,6 @@ export class Bar extends Typegoose {
   public fieldTwo: string;
 }
 
-export const model = new Bar().getModelForClass(Bar);
+export const model = new Bar().getModelForClass(Bar, {
+  typeAlias: 'BarEntity',
+});

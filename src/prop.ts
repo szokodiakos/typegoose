@@ -14,12 +14,12 @@ export type Validator =
   | ValidatorFunction
   | RegExp
   | {
-    validator: ValidatorFunction;
-    message?: string;
-  };
+      validator: ValidatorFunction;
+      message?: string;
+    };
 
 export interface BasePropOptions {
-  /** include this value? 
+  /** include this value?
    * @default true (Implicitly)
    */
   select?: boolean;
@@ -51,6 +51,8 @@ export interface BasePropOptions {
    * @default true (Implicitly)
    */
   _id?: boolean;
+
+  typeAlias?: string;
 }
 
 export interface PropOptions extends BasePropOptions {
@@ -58,7 +60,7 @@ export interface PropOptions extends BasePropOptions {
   ref?: any;
   /** Take the Path and try to resolve it to a Model */
   refPath?: string;
-  /** 
+  /**
    * Give the Property an alias in the output
    * Note: you should include the alias as a variable in the class, but not with a prop decorator
    * @example
@@ -71,6 +73,8 @@ export interface PropOptions extends BasePropOptions {
    * ```
    */
   alias?: string;
+
+  typeAlias?: string;
 }
 
 export interface ValidateNumberOptions {
@@ -117,7 +121,7 @@ export type PropOptionsWithValidate = PropOptionsWithNumberValidate | PropOption
 enum WhatIsIt {
   ARRAY = 'Array',
   MAP = 'Map',
-  NONE = ''
+  NONE = '',
 }
 
 /**
@@ -125,12 +129,7 @@ enum WhatIsIt {
  * @param options The raw Options
  */
 function isWithStringValidate(options: PropOptionsWithStringValidate): boolean {
-  return !isNullOrUndefined(
-    options.match
-    || options.enum
-    || options.minlength
-    || options.maxlength
-  );
+  return !isNullOrUndefined(options.match || options.enum || options.minlength || options.maxlength);
 }
 
 /**
@@ -158,7 +157,7 @@ function isWithNumberValidate(options: PropOptionsWithNumberValidate) {
  * @param isArray is it an array?
  */
 function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: WhatIsIt = WhatIsIt.NONE): void {
-  const name: string = target.constructor.name;
+  const name: string = rawOptions.typeAlias || target.constructor.name;
   const isGetterSetter = Object.getOwnPropertyDescriptor(target, key);
   if (isGetterSetter) {
     if (isGetterSetter.get) {
@@ -293,7 +292,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
         ...schema[name][key][0],
         ...options,
         // HACK: replace this with "[Type]" if https://github.com/Automattic/mongoose/issues/8034 got fixed
-        type: [Type.name === 'ObjectID' ? 'ObjectId' : Type]
+        type: [Type.name === 'ObjectID' ? 'ObjectId' : Type],
       };
       return;
     }
@@ -304,14 +303,14 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
         ...schema[name][key],
         type: Map,
         default: mapDefault,
-        of: { type: Type, ...options }
+        of: { type: Type, ...options },
       };
       return;
     }
     schema[name][key] = {
       ...schema[name][key],
       ...options,
-      type: Type
+      type: Type,
     };
     return;
   }
@@ -322,7 +321,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schema[name][key] = {
       ...schema[name][key],
       ...options,
-      type: Object
+      type: Object,
     };
     return;
   }
@@ -331,10 +330,12 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schema[name][key] = {
       ...schema[name][key][0], // [0] is needed, because "initasArray" adds this (empty)
       ...options,
-      type: [{
-        ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
-        ...subSchema,
-      }]
+      type: [
+        {
+          ...(typeof options._id !== 'undefined' ? { _id: options._id } : {}),
+          ...subSchema,
+        },
+      ],
     };
     return;
   }
@@ -343,11 +344,11 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
     schema[name][key] = {
       ...schema[name][key],
       type: Map,
-      ...options
+      ...options,
     };
     schema[name][key].of = {
       ...schema[name][key].of,
-      ...subSchema
+      ...subSchema,
     };
     return;
   }
@@ -364,7 +365,7 @@ function baseProp(rawOptions: any, Type: any, target: any, key: string, whatis: 
   schema[name][key] = {
     ...schema[name][key],
     ...options,
-    type: virtualSchema
+    type: virtualSchema,
   };
   return;
 }
@@ -387,7 +388,7 @@ export function prop(options: PropOptionsWithValidate = {}) {
 }
 
 export interface ArrayPropOptions extends BasePropOptions {
-  /** What array is it? 
+  /** What array is it?
    * Note: this is only needed because Reflect & refelact Metadata cant give an accurate Response for an array
    */
   items?: any;

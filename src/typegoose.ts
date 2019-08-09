@@ -23,6 +23,8 @@ export interface GetModelForClassOptions {
   schemaOptions?: mongoose.SchemaOptions;
   /** An Existing Connection */
   existingConnection?: mongoose.Connection;
+
+  typeAlias?: string;
 }
 
 /**
@@ -42,9 +44,9 @@ export class Typegoose {
    */
   public getModelForClass<T>(
     t: T,
-    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
+    { existingMongoose, schemaOptions, existingConnection, typeAlias }: GetModelForClassOptions = {}
   ) {
-    const name = this.constructor.name;
+    const name = typeAlias || this.constructor.name;
     if (!models[name]) {
       this.setModelForClass(t, {
         existingMongoose,
@@ -147,7 +149,8 @@ function _buildSchema<T>(t: T, name: string, schemaOptions: any, sch?: mongoose.
     sch.methods = sch.methods || {};
   }
 
-  if (hooks[name]) { // checking to just dont get errors like "hooks[name].pre is not defined"
+  if (hooks[name]) {
+    // checking to just dont get errors like "hooks[name].pre is not defined"
     hooks[name].pre.forEach(preHookArgs => {
       (sch as any).pre(...preHookArgs);
     });
@@ -156,7 +159,8 @@ function _buildSchema<T>(t: T, name: string, schemaOptions: any, sch?: mongoose.
     });
   }
 
-  if (plugins[name]) { // same as the "if (hooks[name])"
+  if (plugins[name]) {
+    // same as the "if (hooks[name])"
     for (const plugin of plugins[name]) {
       sch.plugin(plugin.mongoosePlugin, plugin.options);
     }
