@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
 import { Foo } from '../models/type-alias-foo';
-import { Bar } from '../models/type-alias-bar1';
-import Bar2, { BarModel } from '../models/type-alias-bar2';
+import * as Bar1 from '../models/type-alias-bar1';
+import Bar, { BarModel } from '../models/type-alias-bar2';
 import { InstanceType } from '../../src/typegoose';
 
 /**
@@ -22,20 +22,20 @@ export function suite() {
     const FooModel = new Foo().getModelForClass(Foo);
 
     const foo: InstanceType<Foo> = new FooModel();
-    const bar = new Bar();
+    const bar = new Bar1.default();
     bar.fieldOne = 'hello';
     foo.bar = bar;
-
+    debugger;
     await foo.save();
 
     expect(foo).not.null;
 
-    const bar2: InstanceType<Bar2> = new BarModel();
+    const bar2: InstanceType<Bar> = new BarModel();
     bar2.fieldTwo = 'world';
 
     await bar2.save();
 
-    expect(bar).not.null;
+    expect(bar2).not.null;
 
     // const car = await Car.create({
     //   model: 'Tesla',
