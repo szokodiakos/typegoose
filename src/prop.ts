@@ -14,9 +14,9 @@ export type Validator =
   | ValidatorFunction
   | RegExp
   | {
-      validator: ValidatorFunction;
-      message?: string;
-    };
+    validator: ValidatorFunction;
+    message?: string;
+  };
 
 export interface BasePropOptions {
   /** include this value?

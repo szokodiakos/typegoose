@@ -2,7 +2,8 @@ import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
 import { Foo } from '../models/type-alias-foo';
-import { Bar } from '../models/type-alias-bar2';
+import { Bar } from '../models/type-alias-bar1';
+import Bar2, { BarModel } from '../models/type-alias-bar2';
 import { InstanceType } from '../../src/typegoose';
 
 /**
@@ -17,17 +18,24 @@ import { InstanceType } from '../../src/typegoose';
  * ```
  */
 export function suite() {
-  it('TO BE DEFINED', async () => {
+  it("shouldn't clash two classes with same name using type alias", async () => {
     const FooModel = new Foo().getModelForClass(Foo);
 
     const foo: InstanceType<Foo> = new FooModel();
     const bar = new Bar();
-    bar.fieldTwo = 'hello';
+    bar.fieldOne = 'hello';
     foo.bar = bar;
 
     await foo.save();
 
     expect(foo).not.null;
+
+    const bar2: InstanceType<Bar2> = new BarModel();
+    bar2.fieldTwo = 'world';
+
+    await bar2.save();
+
+    expect(bar).not.null;
 
     // const car = await Car.create({
     //   model: 'Tesla',

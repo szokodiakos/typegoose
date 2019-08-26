@@ -4,7 +4,7 @@ import { pre, prop, Typegoose } from '../../src/typegoose';
 import { Bar } from './type-alias-bar1';
 
 export class Foo extends Typegoose {
-  @prop()
+  @prop({ _id: false })
   public bar: Bar;
 }
 
