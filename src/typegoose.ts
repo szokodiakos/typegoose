@@ -52,6 +52,7 @@ export class Typegoose {
         existingMongoose,
         schemaOptions,
         existingConnection,
+        typeAlias,
       });
     }
 
@@ -70,11 +71,11 @@ export class Typegoose {
    */
   public setModelForClass<T>(
     t: T,
-    { existingMongoose, schemaOptions, existingConnection }: GetModelForClassOptions = {}
+    { existingMongoose, schemaOptions, existingConnection, typeAlias }: GetModelForClassOptions = {}
   ) {
-    const name = this.constructor.name;
+    const name = typeAlias || this.constructor.name;
 
-    const sch = this.buildSchema<T>(t, { existingMongoose, schemaOptions });
+    const sch = this.buildSchema<T>(t, { existingMongoose, schemaOptions, typeAlias });
 
     let model = mongoose.model.bind(mongoose);
     if (existingConnection) {
@@ -95,8 +96,8 @@ export class Typegoose {
    * @param schemaOptions Options for the Schema
    * @returns Returns the Build Schema
    */
-  public buildSchema<T>(t: T, { schemaOptions }: GetModelForClassOptions = {}) {
-    const name = this.constructor.name;
+  public buildSchema<T>(t: T, { schemaOptions, typeAlias }: GetModelForClassOptions = {}) {
+    const name = typeAlias || this.constructor.name;
 
     // get schema of current model
     let sch = _buildSchema<T>(t, name, schemaOptions);
