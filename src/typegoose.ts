@@ -39,6 +39,7 @@ export class Typegoose {
    * @param existingMongoose An Existing Mongoose Connection
    * @param schemaOptions Supports all Mongoose's Schema Options
    * @param existingConnection An Existing Connection
+   * @param typeAlias an alias for the name of class
    * @returns The Model
    * @public
    */
@@ -66,6 +67,7 @@ export class Typegoose {
    * @param existingMongoose An Existing Mongoose Connection
    * @param schemaOptions Supports all Mongoose's Schema Options
    * @param existingConnection An Existing Connection
+   * @param typeAlias an alias for the name of class
    * @returns The Model
    * @public
    */
@@ -94,6 +96,7 @@ export class Typegoose {
    * Generates a Mongoose schema out of class props, iterating through all parents
    * @param t The not initialized Class
    * @param schemaOptions Options for the Schema
+   * @param typeAlias an alias for the name of class
    * @returns Returns the Build Schema
    */
   public buildSchema<T>(t: T, { schemaOptions, typeAlias }: GetModelForClassOptions = {}) {

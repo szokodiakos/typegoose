@@ -53,6 +53,7 @@ export interface BasePropOptions {
   _id?: boolean;
 
   typeAlias?: string;
+  /** Give an alias for the name of class to avoid name clashing for class with the same name */
 }
 
 export interface PropOptions extends BasePropOptions {
@@ -75,6 +76,7 @@ export interface PropOptions extends BasePropOptions {
   alias?: string;
 
   typeAlias?: string;
+  /** Give an alias for the name of class to avoid name clashing for class with the same name */
 }
 
 export interface ValidateNumberOptions {
