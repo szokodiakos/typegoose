@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { pre, prop, Typegoose } from '../../src/typegoose';
 
-export class Bar {
+export class Event {
   @prop({ required: true })
-  public fieldThree: string;
+  public name: string;
 }

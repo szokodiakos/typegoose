@@ -2,7 +2,7 @@ import * as mongoose from 'mongoose';
 
 import { prop, Typegoose } from '../../src/typegoose';
 
-export class Bar extends Typegoose {
+export class Event extends Typegoose {
   // constructor(fieldTwo: string, fieldOne?: string) {
   //   super();
   //   this.fieldOne = fieldOne;
@@ -10,13 +10,12 @@ export class Bar extends Typegoose {
   // }
 
   @prop()
-  public fieldOne: string;
+  public name: string;
 
   @prop({ required: true })
-  public fieldTwo: string;
+  public code: string;
 }
 
-export const BarModel = new Bar().getModelForClass(Bar, {
-  typeAlias: 'BarEntity',
+export const EventModel = new Event().getModelForClass(Event, {
+  typeAlias: 'EventEntity',
 });
-// export const BarModel = new Bar().getModelForClass(Bar);
