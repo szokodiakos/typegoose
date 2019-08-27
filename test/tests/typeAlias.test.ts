@@ -1,10 +1,12 @@
 import { expect } from 'chai';
 import * as mongoose from 'mongoose';
 
-import { Foo } from '../models/type-alias-foo';
-import * as Bar1 from '../models/type-alias-bar1';
-import Bar, { BarModel } from '../models/type-alias-bar2';
+import { Foo, FooModel } from '../models/type-alias-foo';
+import * as TypeAliasBar1 from '../models/type-alias-bar1';
+import * as TypeAliasBar2 from '../models/type-alias-bar2';
+import * as TypeAliasBar3 from '../models/type-alias-bar3';
 import { InstanceType } from '../../src/typegoose';
+import { BazModel, Baz } from '../models/type-alias-baz';
 
 /**
  * Function to pass into describe
@@ -18,44 +20,38 @@ import { InstanceType } from '../../src/typegoose';
  * ```
  */
 export function suite() {
-  it("shouldn't clash two classes with same name using type alias", async () => {
-    const FooModel = new Foo().getModelForClass(Foo);
-
+  it("shouldn't clash two classes with same name", async () => {
     const foo: InstanceType<Foo> = new FooModel();
-    const bar = new Bar1.default();
-    bar.fieldOne = 'hello';
-    foo.bar = bar;
-    debugger;
+    const nestedBar = new TypeAliasBar1.Bar();
+    nestedBar.fieldOne = 'hello';
+    foo.bar = nestedBar;
     await foo.save();
-
     expect(foo).not.null;
 
-    const bar2: InstanceType<Bar> = new BarModel();
-    bar2.fieldTwo = 'world';
+    const barEntity: InstanceType<TypeAliasBar2.Bar> = new TypeAliasBar2.BarModel();
+    barEntity.fieldTwo = 'world';
+    await barEntity.save();
+    expect(barEntity).not.null;
+  });
 
-    await bar2.save();
+  it("shouldn't clash two nested classes with same name", async () => {
+    const foo: InstanceType<Foo> = new FooModel();
+    const nestedBar = new TypeAliasBar1.Bar();
+    nestedBar.fieldOne = 'hello';
+    foo.bar = nestedBar;
+    await foo.save();
+    expect(foo).not.null;
 
-    expect(bar2).not.null;
+    const barEntity: InstanceType<TypeAliasBar2.Bar> = new TypeAliasBar2.BarModel();
+    barEntity.fieldTwo = 'world';
+    await barEntity.save();
+    expect(barEntity).not.null;
 
-    // const car = await Car.create({
-    //   model: 'Tesla',
-    //   price: mongoose.Types.Decimal128.fromString('50123.25')
-    // });
-    // const carReflectedType = getClassForDocument(car);
-    // expect(carReflectedType).to.equals(CarType);
-
-    // const user = await User.create({
-    //   firstName: 'John2',
-    //   lastName: 'Doe2',
-    //   gender: Genders.MALE,
-    //   languages: ['english2', 'typescript2'],
-    //   uniqueId: 'not-needed'
-    // });
-    // const userReflectedType = getClassForDocument(user);
-    // expect(userReflectedType).to.equals(UserType);
-
-    // // assert negative to be sure (false positive)
-    // expect(carReflectedType).to.not.equals(UserType);
-    // expect(userReflectedType).to.not.equals(CarType);
+    const baz: InstanceType<Baz> = new BazModel();
+    const nestedBar3 = new TypeAliasBar3.Bar();
+    nestedBar3.fieldThree = '!';
+    baz.bar = nestedBar3;
+    await baz.save();
+    expect(baz).not.null;
   });
 }

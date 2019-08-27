@@ -4,5 +4,5 @@ import { pre, prop, Typegoose } from '../../src/typegoose';
 
 export class Bar {
   @prop({ required: true })
-  public fieldOne: string;
+  public fieldThree: string;
 }
