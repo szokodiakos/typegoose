@@ -9,7 +9,8 @@ import { model as InternetUser } from '../models/internet-user';
 import { AddressNested, PersonNested, PersonNestedModel } from '../models/nested-object';
 import { model as Person } from '../models/person';
 import { model as User, User as UserType } from '../models/user';
-import { EventModel, Event } from '../models/type-alias-event2';
+import * as TypeAliasEvent2 from '../models/type-alias-event2';
+import * as TypeAliasEvent4 from '../models/type-alias-event4';
 
 /**
  * Function to pass into describe
@@ -47,9 +48,13 @@ export function suite() {
   });
 
   it(`should return correct class type for document also using typeAlias`, async () => {
-    const event = new EventModel();
-    const eventReflectedType = getClassForDocument(event);
-    expect(eventReflectedType).to.equals(Event);
+    const event1 = new TypeAliasEvent2.EventModel();
+    const eventReflectedType1 = getClassForDocument(event1);
+    expect(eventReflectedType1).to.equals(TypeAliasEvent2.Event);
+
+    const event2 = new TypeAliasEvent4.EventModel();
+    const eventReflectedType2 = getClassForDocument(event2);
+    expect(eventReflectedType2).to.equals(TypeAliasEvent4.Event);
   });
 
   it('should use inherited schema', async () => {
