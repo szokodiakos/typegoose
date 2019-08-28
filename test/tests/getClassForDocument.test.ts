@@ -9,6 +9,7 @@ import { model as InternetUser } from '../models/internet-user';
 import { AddressNested, PersonNested, PersonNestedModel } from '../models/nested-object';
 import { model as Person } from '../models/person';
 import { model as User, User as UserType } from '../models/user';
+import { EventModel, Event } from '../models/type-alias-event2';
 
 /**
  * Function to pass into describe
@@ -25,7 +26,7 @@ export function suite() {
   it('should return correct class type for document', async () => {
     const car = await Car.create({
       model: 'Tesla',
-      price: mongoose.Types.Decimal128.fromString('50123.25')
+      price: mongoose.Types.Decimal128.fromString('50123.25'),
     });
     const carReflectedType = getClassForDocument(car);
     expect(carReflectedType).to.equals(CarType);
@@ -35,7 +36,7 @@ export function suite() {
       lastName: 'Doe2',
       gender: Genders.MALE,
       languages: ['english2', 'typescript2'],
-      uniqueId: 'not-needed'
+      uniqueId: 'not-needed',
     });
     const userReflectedType = getClassForDocument(user);
     expect(userReflectedType).to.equals(UserType);
@@ -45,12 +46,18 @@ export function suite() {
     expect(userReflectedType).to.not.equals(CarType);
   });
 
+  it(`should return correct class type for document also using typeAlias`, async () => {
+    const event = new EventModel();
+    const eventReflectedType = getClassForDocument(event);
+    expect(eventReflectedType).to.equals(Event);
+  });
+
   it('should use inherited schema', async () => {
     let user = await Person.create({ email: 'my@email.com' });
 
     const car = await Car.create({
       model: 'Tesla',
-      price: mongoose.Types.Decimal128.fromString('50123.25')
+      price: mongoose.Types.Decimal128.fromString('50123.25'),
     });
     await user.addCar(car);
 
@@ -74,10 +81,7 @@ export function suite() {
     const personInput = new PersonNested();
     personInput.name = 'Person, Some';
     personInput.address = new AddressNested('A Street 1');
-    personInput.moreAddresses = [
-      new AddressNested('A Street 2'),
-      new AddressNested('A Street 3'),
-    ];
+    personInput.moreAddresses = [new AddressNested('A Street 2'), new AddressNested('A Street 3')];
 
     const person = await PersonNestedModel.create(personInput);
 
@@ -104,14 +108,12 @@ export function suite() {
         price: 'NO DECIMAL',
       });
       // fail('Validation must fail.');
-
     } catch (e) {
-
       expect(e).to.be.a.instanceof((mongoose.Error as any).ValidationError);
     }
     const car = await Car.create({
       model: 'Tesla',
-      price: mongoose.Types.Decimal128.fromString('123.45')
+      price: mongoose.Types.Decimal128.fromString('123.45'),
     });
     const foundCar = await Car.findById(car._id).exec();
     expect(foundCar.price).to.be.a.instanceof(mongoose.Types.Decimal128);
@@ -126,7 +128,8 @@ export function suite() {
       fail('Validation must fail.');
     } catch (e) {
       expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
-      expect(e.message).to.be.equal( // test it specificly, to know that it is not another error
+      expect(e.message).to.be.equal(
+        // test it specificly, to know that it is not another error
         'Person validation failed: email: Validator failed for path `email` with value `email`'
       );
     }
@@ -136,13 +139,14 @@ export function suite() {
     try {
       await InternetUser.create({
         projects: {
-          p1: 'project'
-        }
+          p1: 'project',
+        },
       });
       fail('Validation Should Fail');
     } catch (e) {
       expect(e).to.be.a.instanceof(mongoose.Error.ValidationError);
-      expect(e.message).to.be.equal( // test it specificly, to know that it is not another error
+      expect(e.message).to.be.equal(
+        // test it specificly, to know that it is not another error
         'InternetUser validation failed: projects.p1: `project` is not a valid enum value for path `projects.p1`.'
       );
     }
